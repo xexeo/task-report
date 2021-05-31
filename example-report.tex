@@ -1,0 +1,72 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazilian]{babel}
+\usepackage{mdframed}
+\usepackage{etoolbox}
+\usepackage{../coop-writing/coop-writing}
+\cwautor{xexeo}{red}{Xexéo}
+\author{Geraldo Xexéo}
+\title{Time Sheet}
+
+\newcommand{\trstatus}[2][Status]{%
+\textbf{#1}: #2%
+}%
+\newcommand{\trwhen}[2][Assigned in]{%
+\textbf{#1}: #2%
+}%
+\newcommand{\trwho}[2][To]{%
+\textbf{#1}: #2%
+}%
+\newcommand{\trwhat}[2][What]{%
+\textbf{#1}: #2%
+}%
+\newcommand{\trwhy}[2][Rationale:]{%
+\textbf{#1}: #2%
+}%
+
+% [why] status , when-assigned, from-who, to-who, what, when-done
+\newcommand{\trtask}[7][]{%
+\begin{mdframed}
+\par%
+\ifstrempty{#3}{\textbf{Task not defined}\newline}%
+{%
+\trwhat[Task]{#3}\newline%
+}%
+\ifstrempty{#2}{}%
+{%
+\trstatus{#2}\newline%
+}%
+\ifstrempty{#4}{}%
+{%
+\trwhen{#4}\newline%
+}%
+\ifstrempty{#5}{}%
+{%
+\trwho[From]{#5}\newline%
+}%
+\ifstrempty{#6}{}%
+{%
+\trwho{#6}\newline%
+}%
+\ifstrempty{#7}{}%
+{%
+\trwhen[Done in]{#7}\newline%
+}%
+\ifstrempty{#1}{}%
+{%
+\trwhy{#1}\newline%
+}%
+\end{mdframed}%
+}%
+
+\begin{document}
+\maketitle
+    Trying to define a Time Sheet or similar.
+
+\trtask[why]{status}{title}{when}{who}{to-who}{whe-done}
+\trtask[lop]{to-do}{Descrever experimento 1}{2021-05-31}{Xexéo}{Aluno}{}
+\trtask{}{done}{Descrever experimento 2}{}{}{}
+
+
+\end{document}

@@ -1,0 +1,442 @@
+% \iffalse meta-comment
+%
+% Copyright (C) 2021 by Geraldo Xexéo
+%
+% This file may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either
+% version 1.3 of this license or (at your option) any later
+% version. The latest version of this license is in:
+%
+% http://www.latex-project.org/lppl.txt
+%
+% and version 1.3 or later is part of all distributions of
+% LaTeX version 2005/12/01 or later.
+%
+% \fi
+%
+%
+%\iffalse
+%<package>\NeedsTeXFormat{LaTeX2e}
+%<package>\def\tr@version{v0.1}
+%<package>\ProvidesPackage{task-report}[2021/05/31 \tr@version task-report]
+%<*driver>
+\documentclass{ltxdoc}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{csquotes}
+\usepackage[brazilian,english]{babel}
+\usepackage{datetime}
+\usepackage{graphicx}
+\usepackage{indentfirst}
+\setlength{\parskip}{0.5em}
+\usepackage{marvosym}
+\usepackage[backend=biber,style=alphabetic,natbib]{biblatex}
+\usepackage[editing]{coop-writing}
+\usepackage{task-report}
+\usepackage{hyperref}
+\cwnamedef{xexeo}{red}{Xexéo}
+%
+\EnableCrossrefs
+\CodelineIndex
+\RecordChanges
+%
+\DoNotIndex{\def,\long,\edef,\xdef,\gdef,\let,\global}
+\DoNotIndex{\begin,\AtEndDocument,\newcommand,\newcounter,\stepcounter}
+\DoNotIndex{\immediate,\openout,\closeout,\message,\typeout}
+\DoNotIndex{\section,\scshape,\arabic}
+%
+%
+%
+\title{Task Report \taskreportversion}
+\author{Geraldo Xexéo}
+\date{\today\ - \ \currenttime}
+\GetFileInfo{task-report.sty}
+%
+\makeindex
+\MakeShortVerb{\|}
+\begin{document}
+    \DocInput{task-report.dtx}
+    \newpage
+    \PrintChanges
+    \newpage
+    \PrintIndex
+\end{document}
+%</driver>
+% \fi
+%
+% \CheckSum{0}
+%
+% \CharacterTable
+%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%   Digits        \0\1\2\3\4\5\6\7\8\9
+%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%   Dollar        \$     Percent       \%     Ampersand     \&
+%   Acute accent  \'     Left paren    \(     Right paren   \)
+%   Asterisk      \*     Plus          \+     Comma         \,
+%   Minus         \-     Point         \.     Solidus       \/
+%   Colon         \:     Semicolon     \;     Less than     \<
+%   Equals        \=     Greater than  \>     Question mark \?
+%   Commercial at \@     Left bracket  \[     Backslash     \\
+%   Right bracket \]     Circumflex    \^     Underscore    \_
+%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%   Right brace   \}     Tilde         \~}
+%
+% \changes{v0.1}{2021/05/31}{First version}
+%\maketitle
+%
+% \tableofcontents
+%
+%\section{Introduction}
+%
+% This package supports the maintenance and report of a task list..
+%
+%
+% \section{How to use task-report}
+%
+% |task-report| is available as open source at \url{https://github.com/xexeo/task-report}. The stable distribution is in the folder |dist|, while the lastest, and unstable, will be in the root folder.
+%
+% The only file you really need, besides this manual, is
+% |task-report.sty|. This should be in your \LaTeX\   path, such as in the same folder that your main |.tex| file.
+%
+% You can make suggestions, complain about bugs, and request features using GitHub's ``Issues'' feature, in \url{https://github.com/xexeo/task-report/issues} (you must be signed in).
+%
+% \subsection{Using from Overleaf}
+%
+% The best way to use |task-report| inside Overleaf is to link
+% the distributed style file through its URL. To do that, inside your project, select first ``Upload''. An ``Add files'' window will appear, then select ``From Externa URL'' and enter \url{https://raw.githubusercontent.com/xexeo/task-report/main/dist/task-report.sty} as ``URL to fetch the file from'' and ``task-report'' as ``File Name in This Project'', as in Figure \ref{fig:overleaffileurl}.
+%
+%\begin{figure}[tbh]
+%    \centering
+%    \includegraphics[width=0.9\linewidth]{images/overleaffileurl}
+%    \caption{How to link a task-report.sty file in your project folder in Overleaf to the official distribution.}
+%    \label{fig:overleaffileurl}
+%\end{figure}
+%
+%
+% \section{Package Options}
+%
+% There are no package options up to now
+%
+% \subsection{General behavior}
+%
+%
+%\section{Version}
+%
+% It is possible that the user wants to know the version
+% being used. We provide two commands for it.
+%
+% \DescribeMacro{\taskreportversion}
+% Provides the current version
+%
+% \DescribeMacro{\printtaskreportversion}
+% Provides name and version
+%
+%
+% |\taskreportversion| was used in the title of this article. The current version is \taskreportversion.
+%
+% If needed, the second macro prints also the name of the
+% package:
+%
+%|\printtaskreportversion|
+%
+% will result in:
+%
+%\printtaskreportversion
+%
+% Please state the version when reporting bugs.
+%
+%
+% \section{Usage}
+%
+% \DescribeMacro{\trtask}
+%
+% This is the main macro for the package.
+%|\trtask|\oarg{status}\marg{name}\marg{when-assigned}
+% \marg{who-assigned}\marg{to-who-assigned}
+% \marg{why}
+% \marg{when-done}
+% \marg{extra-text}
+%
+% Altough it has 7 mandatory parameters, all of them can be empty.
+%
+% The example:
+%\begin{verbatim}
+%\trtask[todo]{Mage coffe}{\today}{Geraldo Xexéo}{}{}{}{Please do the coffe strong}
+%\trtask[doing]{Drink a coffe}{\today}{The Boss}{The Worker}{}{}{}
+%\trtask[done]{Drink a beer}{\today}{The Boss}{The Worker}{\today}{}{}
+%\trtask{}{}{}{}{}{}{}
+%\trtask[done]{}{}{}{}{}{}{}
+%\trtask{Grab a hot-dog}{3}{4}{5}{6}{7}{A hot dog must be done with bread and sausage}
+%\end{verbatim}
+% generates:
+%
+%\trtask[todo]{Mage coffe}{\today}{Geraldo Xexéo}{}{}{}{Please do the coffe strong}
+%\trtask[doing]{Drink a coffe}{\today}{The Boss}{The Worker}{}{}{}
+%\trtask[done]{Drink a beer}{\today}{The Boss}{The Worker}{\today}{}{}
+%\trtask{}{}{}{}{}{}{}
+%\trtask[done]{}{}{}{}{}{}{}
+%\trtask{Grab a hot-dog}{3}{4}{5}{6}{7}{A hot dog must be done with bread and sausage}
+%
+%
+% \subsection{Configuration Options}
+%
+% \DescribeMacro{\trsetboxcolors}
+%% Set the colors for the 4 types of standard states
+% Black otherwise.
+%
+% |\trsetboxcolors|\marg{todo-color}\marg{doing-color}\marg{done-color}\marg{other-color}
+%
+% The example:
+%
+%\begin{verbatim}
+%\trsetboxcolors{blue}{purple}{orange}{green}
+%
+%\trtask[todo]{Drink a coffe}{\today}{The Boss}{The Worker}%
+%{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+%\trtask[doing]{Drink a coffe}{\today}{The Boss}{The Worker}%
+%{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+%\trtask[done]{Drink a coffe}{\today}{The Boss}{The Worker}%
+%{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+%\trtask{Drink a coffe}{\today}{The Boss}{The Worker}%
+%{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+%
+%\end{verbatim}
+%
+% generates:
+%
+%\trsetboxcolors{magenta}{purple}{lime}{pink}
+%
+%\trtask[todo]{Drink a coffe}{\today}{The Boss}{The Worker}%
+%{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+%\trtask[doing]{Drink a coffe}{\today}{The Boss}{The Worker}%
+%{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+%\trtask[done]{Drink a coffe}{\today}{The Boss}{The Worker}%
+%{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+%\trtask{Drink a coffe}{\today}{The Boss}{The Worker}%
+%{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+%
+%
+%\trsetboxcolors{red}{yellow}{green}{black}
+%
+%\section{Warnings}
+% This package uses another package that changes \LaTeX's standard behavior for summary and lists. When you use it, you must explicitly change pages with |\newpage|
+% before |\tableofcontents| or similar commands.
+%
+% \section{Implementation}
+% This package was initially written in Portuguese. As it become more
+% useful, it was translated to English. There are still some signs
+% of this in the code.
+%
+% \StopEventually{End of Code}
+%
+% \subsection{Required Packages}
+%
+%
+%\begin{itemize}
+%    \item |mdframed| makes the frame aroung tasks
+%    \item |etoolbox| command ifstringempty
+%\end{itemize}
+%
+%    \begin{macrocode}
+\RequirePackage{tcolorbox}%
+\RequirePackage{etoolbox}%
+\RequirePackage{xstring}%
+%    \end{macrocode}
+%
+% \subsection{Access to the current version}
+% We provide some macros for the user to know the version being used.
+% \begin{macro}{\taskreportversion}
+% Provides current version of coop-writing
+%    \begin{macrocode}
+\newcommand{\taskreportversion}{\tr@version}%
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\printtaskreportversion}
+% Provides package name and version
+%    \begin{macrocode}
+\newcommand{\printtaskreportversion}{task-report v. \taskreportversion}%
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{Color Management}
+%
+% \begin{macro}{\tr@todoboxcolor}
+% \begin{macro}{\tr@doingboxcolor}
+% \begin{macro}{\tr@doneboxcolor}
+% \begin{macro}{\tr@otherwisecolor}
+% Global variables for the box colors.
+%
+%    \begin{macrocode}
+\def\tr@todoboxcolor{red}%
+\def\tr@doingboxcolor{yellow}%
+\def\tr@doneboxcolor{green}%
+\def\tr@otherwisecolor{black}%
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\trsetboxcolors}
+%
+% Set the colors for the 4 types of standard states
+% Black otherwise.
+%
+% |\trsetboxcolors|\marg{todo-color}\marg{doing-color}\marg{done-color}\marg{other-color}
+%
+%    \begin{macrocode}
+\newcommand{\trsetboxcolors}[4]{%
+\def\tr@todoboxcolor{#1}%
+\def\tr@doingboxcolor{#2}%
+\def\tr@doneboxcolor{#3}%
+\def\tr@otherwisecolor{#4}%
+}%
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\tr@currentboxcolor}
+%
+% The dirt trick of using a global variable to
+% store a value
+%
+%    \begin{macrocode}
+\def\tr@currentboxcolor{\tr@otherwisecolor}%
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\trstatuscolor}
+%
+% Select the color based on the state
+%
+% |\trstatuscolor|\marg{state}
+%
+%    \begin{macrocode}
+\newcommand{\trstatuscolor}[1]%
+{%
+    \def\tr@currentboxcolor{\tr@otherwisecolor}%
+    \ifstrempty{#1}{}{%
+    \IfStrEqCase{#1}{%
+    {todo}{\def\tr@currentboxcolor{\tr@todoboxcolor}}%
+    {doing}{\def\tr@currentboxcolor{\tr@doingboxcolor}}%
+    {done}{\def\tr@currentboxcolor{\tr@doneboxcolor}}%
+    }%
+    }%
+}%
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \subsection{Declaring Tasks}
+%
+% \subsubsection{Helpers}
+%
+% \begin{macro}{\trstatus}
+% \begin{macro}{\trwhen}
+% \begin{macro}{\trwhy}
+% \begin{macro}{\trwhat}
+% \begin{macro}{\trwho}
+%
+% Helpers to build the task
+%
+%    \begin{macrocode}
+\newcommand{\trstatus}[2][Status]{%
+    \textbf{#1}: #2%
+}%
+\newcommand{\trwhen}[2][Assigned in]{%
+    \textbf{#1}: #2%
+}%
+\newcommand{\trwho}[2][To]{%
+    \textbf{#1}: #2%
+}%
+\newcommand{\trwhat}[2][What]{%
+    \textbf{#1}: #2%
+}%
+\newcommand{\trwhy}[2][Rationale]{%
+    \textbf{#1}: #2%
+}%
+%
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \subsubsection{Main task macro}
+%
+% \begin{macro}{\trtask}
+%
+%  Describes a task
+%
+%|\trtask|\oarg{status}\marg{name}\marg{when-assigned}
+%\marg{who-assigned}\marg{to-who-assigned}\marg{why}\marg{when-done}\marg{extra-text}
+%
+% For example:
+%\begin{verbatim}
+%\trtask[Help students organize]{doing}
+% {Prepare a \LaTeX\ style to support task report}
+% {2021-05-31}{Xexéo}{Geraldo Xexéo}{}
+%\end{verbatim}
+%
+% generates:
+%
+%\trtask[doing]{Prepare a \LaTeX\ style to support task report}
+% {2021-05-31}{Xexéo}{Geraldo Xexéo}{Help students organize}
+% {not yet}{This is an idea to help understanding the work being done}
+%
+%    \begin{macrocode}
+%  [status] , what, when-assigned, from-who, to-who, why, when-done, extra
+\newcommand{\trtask}[8][]{%
+    \par%
+    \ifstrempty{#2}{
+    \def\trtask@temp{Task not defined}%
+    }%
+    {%
+    \def\trtask@temp{#2}%
+    }%
+    \trstatuscolor{#1}%
+    \begin{tcolorbox}[title=\textbf{\trtask@temp},%
+         colback=\tr@currentboxcolor!5!white,%
+         colframe=\tr@currentboxcolor!75!black%
+        ]%
+        \ifstrempty{#1}{}%
+        {%
+            \trstatus{#1}\newline%
+        }%
+        \ifstrempty{#3}{}%
+        {%
+            \trwhen{#3}\newline%
+        }%
+        \ifstrempty{#4}{}%
+        {%
+            \trwho[From]{#4}\newline%
+        }%
+        \ifstrempty{#5}{}%
+        {%
+            \trwho{#5}\newline%
+        }%
+        \ifstrempty{#6}{}%
+        {%
+        \trwhy{#1}\newline%
+        }%
+        \ifstrempty{#7}{}%
+        {%
+            \trwhen[Done in]{#7}\newline%
+        }%
+        \ifstrempty{#8}{}%
+        {\tcblower%
+        #8%
+        }%
+    \end{tcolorbox}%
+}%
+%    \end{macrocode}
+% \end{macro}
+% \Finale
+%
+% \endinput
+% Local Variables:
+% mode: doctex
+% TeX-master: t
+% End:
