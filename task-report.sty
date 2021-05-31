@@ -30,13 +30,17 @@
 \newcommand{\printtaskreportversion}{task-report v. \taskreportversion}%
 \def\tr@todoboxcolor{red}%
 \def\tr@doingboxcolor{yellow}%
+\def\tr@tocheckboxcolor{cyan}%
+\def\tr@checkingboxcolor{blue}%
 \def\tr@doneboxcolor{green}%
 \def\tr@otherwisecolor{black}%
-\newcommand{\trsetboxcolors}[4]{%
+\newcommand{\trsetboxcolors}[6]{%
 \def\tr@todoboxcolor{#1}%
 \def\tr@doingboxcolor{#2}%
-\def\tr@doneboxcolor{#3}%
-\def\tr@otherwisecolor{#4}%
+\def\tr@tocheckboxcolor{#3}%
+\def\tr@checkingcolor{#4}%
+\def\tr@doneboxcolor{#5}%
+\def\tr@otherwisecolor{#6}%
 }%
 \def\tr@currentboxcolor{\tr@otherwisecolor}%
 \newcommand{\trstatuscolor}[1]%
@@ -47,6 +51,8 @@
     {todo}{\def\tr@currentboxcolor{\tr@todoboxcolor}}%
     {doing}{\def\tr@currentboxcolor{\tr@doingboxcolor}}%
     {done}{\def\tr@currentboxcolor{\tr@doneboxcolor}}%
+    {tocheck}{\def\tr@currentboxcolor{\tr@tocheckboxcolor}}%
+    {checking}{\def\tr@currentboxcolor{\tr@checkingboxcolor}}%
     }%
     }%
 }%
@@ -96,7 +102,7 @@
         }%
         \ifstrempty{#6}{}%
         {%
-        \trwhy{#1}\newline%
+        \trwhy{#6}\newline%
         }%
         \ifstrempty{#7}{}%
         {%

@@ -160,10 +160,14 @@
 %
 % Altough it has 7 mandatory parameters, all of them can be empty.
 %
+% There are 5 possible states that are associated with a color (\textit{default color}): todo (red), doing(yellow), tocheck (cyan), checking (blue), and done(green). There is a pseudo-state other (black) that will be the color of any other word used of a state. Colors belong to the |xcolor| package and are configurable, as explained in section \ref{sec:conf}.
+%
 % The example:
 %\begin{verbatim}
 %\trtask[todo]{Mage coffe}{\today}{Geraldo Xexéo}{}{}{}{Please do the coffe strong}
-%\trtask[doing]{Drink a coffe}{\today}{The Boss}{The Worker}{}{}{}
+%\trtask[doing]{Drink a coffe}{June, 1st 2021}{The Boss}{The Worker}{}{}{}
+%\trtask[tocheck]{Roast the beef}{June, 1st 2021}{The Boss}{The Worker}{\today}{}{Rare, please}
+%\trtask[checking]{Drink another beer}{June, 1st 2021}{The Boss}{The Worker}{\today}{}{Please check if you have age to drink in your country. If not, drink orangejuice.}
 %\trtask[done]{Drink a beer}{\today}{The Boss}{The Worker}{\today}{}{}
 %\trtask{}{}{}{}{}{}{}
 %\trtask[done]{}{}{}{}{}{}{}
@@ -172,7 +176,9 @@
 % generates:
 %
 %\trtask[todo]{Mage coffe}{\today}{Geraldo Xexéo}{}{}{}{Please do the coffe strong}
-%\trtask[doing]{Drink a coffe}{\today}{The Boss}{The Worker}{}{}{}
+%\trtask[doing]{Drink a coffe}{June, 1st 2021}{The Boss}{The Worker}{}{}{}
+%\trtask[tocheck]{Roast the beef}{June, 1st 2021}{The Boss}{The Worker}{\today}{}{Rare, plese}
+%\trtask[checking]{Drink another beer}{June, 1st 2021}{The Boss}{The Worker}{\today}{}{Please check if you have age to drink in your country. If not, drink orangejuice.}
 %\trtask[done]{Drink a beer}{\today}{The Boss}{The Worker}{\today}{}{}
 %\trtask{}{}{}{}{}{}{}
 %\trtask[done]{}{}{}{}{}{}{}
@@ -180,7 +186,7 @@
 %
 %
 % \subsection{Configuration Options}
-%
+%\label{sec:conf}
 % \DescribeMacro{\trsetboxcolors}
 %% Set the colors for the 4 types of standard states
 % Black otherwise.
@@ -190,26 +196,33 @@
 % The example:
 %
 %\begin{verbatim}
-%\trsetboxcolors{blue}{purple}{orange}{green}
+%\trsetboxcolors{magenta}{purple}{orange}{pink}{lime}{pink}
 %
 %\trtask[todo]{Drink a coffe}{\today}{The Boss}{The Worker}%
 %{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
 %\trtask[doing]{Drink a coffe}{\today}{The Boss}{The Worker}%
 %{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+%\trtask[tocheck]{Drink a coffe}{\today}{The Boss}{The Worker}%
+%{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+%\trtask[checking]{Drink a coffe}{\today}{The Boss}{The Worker}%
+%{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
 %\trtask[done]{Drink a coffe}{\today}{The Boss}{The Worker}%
 %{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
 %\trtask{Drink a coffe}{\today}{The Boss}{The Worker}%
 %{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
-%
 %\end{verbatim}
 %
 % generates:
 %
-%\trsetboxcolors{magenta}{purple}{lime}{pink}
+%\trsetboxcolors{magenta}{purple}{orange}{pink}{lime}{pink}
 %
 %\trtask[todo]{Drink a coffe}{\today}{The Boss}{The Worker}%
 %{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
 %\trtask[doing]{Drink a coffe}{\today}{The Boss}{The Worker}%
+%{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+%\trtask[tocheck]{Drink a coffe}{\today}{The Boss}{The Worker}%
+%{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+%\trtask[checking]{Drink a coffe}{\today}{The Boss}{The Worker}%
 %{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
 %\trtask[done]{Drink a coffe}{\today}{The Boss}{The Worker}%
 %{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
@@ -217,7 +230,7 @@
 %{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
 %
 %
-%\trsetboxcolors{red}{yellow}{green}{black}
+%\trsetboxcolors{red}{yellow}{cyan}{blue}{green}{black}
 %
 %\section{Warnings}
 % This package uses another package that changes \LaTeX's standard behavior for summary and lists. When you use it, you must explicitly change pages with |\newpage|
@@ -265,12 +278,16 @@
 % \begin{macro}{\tr@todoboxcolor}
 % \begin{macro}{\tr@doingboxcolor}
 % \begin{macro}{\tr@doneboxcolor}
+% \begin{macro}{\tr@tocheckboxcolor}
+% \begin{macro}{\tr@checkingboxcolor}
 % \begin{macro}{\tr@otherwisecolor}
 % Global variables for the box colors.
 %
 %    \begin{macrocode}
 \def\tr@todoboxcolor{red}%
 \def\tr@doingboxcolor{yellow}%
+\def\tr@tocheckboxcolor{cyan}%
+\def\tr@checkingboxcolor{blue}%
 \def\tr@doneboxcolor{green}%
 \def\tr@otherwisecolor{black}%
 %    \end{macrocode}
@@ -278,20 +295,24 @@
 % \end{macro}
 % \end{macro}
 % \end{macro}
+% \end{macro}
+% \end{macro}
 %
 % \begin{macro}{\trsetboxcolors}
 %
-% Set the colors for the 4 types of standard states
+% Set the colors for the 6 types of standard states
 % Black otherwise.
 %
-% |\trsetboxcolors|\marg{todo-color}\marg{doing-color}\marg{done-color}\marg{other-color}
+% |\trsetboxcolors|\marg{todo-color}\marg{doing-color}\marg{tocheck-color}\marg{checking-color}\marg{done-color}\marg{other-color}
 %
 %    \begin{macrocode}
-\newcommand{\trsetboxcolors}[4]{%
+\newcommand{\trsetboxcolors}[6]{%
 \def\tr@todoboxcolor{#1}%
 \def\tr@doingboxcolor{#2}%
-\def\tr@doneboxcolor{#3}%
-\def\tr@otherwisecolor{#4}%
+\def\tr@tocheckboxcolor{#3}%
+\def\tr@checkingcolor{#4}%
+\def\tr@doneboxcolor{#5}%
+\def\tr@otherwisecolor{#6}%
 }%
 %    \end{macrocode}
 % \end{macro}
@@ -321,6 +342,8 @@
     {todo}{\def\tr@currentboxcolor{\tr@todoboxcolor}}%
     {doing}{\def\tr@currentboxcolor{\tr@doingboxcolor}}%
     {done}{\def\tr@currentboxcolor{\tr@doneboxcolor}}%
+    {tocheck}{\def\tr@currentboxcolor{\tr@tocheckboxcolor}}%
+    {checking}{\def\tr@currentboxcolor{\tr@checkingboxcolor}}%
     }%
     }%
 }%
@@ -419,7 +442,7 @@
         }%
         \ifstrempty{#6}{}%
         {%
-        \trwhy{#1}\newline%
+        \trwhy{#6}\newline%
         }%
         \ifstrempty{#7}{}%
         {%
