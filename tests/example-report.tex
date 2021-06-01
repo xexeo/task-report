@@ -84,6 +84,22 @@
 \trtask[]{Drink a coffe}{\today}{The Boss}{The Worker}%
 {To keep awake}{\today}{}
 
+\section{Setting Field Names}
+
+Setting them:
+
+\trsetfieldsnames{Stage}{Demand date}{Who asked for}{To who}{Ready in}{Reasons}
+\trtask[done]{Drink a coffe}{\today}{The Boss}{The Worker}%
+{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+
+ This command can be used to internationalization.
+
+After changing to original values.
+
+\trsetfieldsnames{Status}{Assigned in}{From}{To}{Done in}{Rationale}
+\trtask[done]{Drink a coffe}{\today}{The Boss}{The Worker}%
+{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+
 \newpage
 \setlength{\cfttasksnumwidth}{20pt}
 \trsettasklisttitle{Lista de Tarefas}

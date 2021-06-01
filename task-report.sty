@@ -20,9 +20,9 @@
 %% and version 1.3 or later is part of all distributions of LaTeX version
 %% 2005/12/01 or later.
 \NeedsTeXFormat{LaTeX2e}
-\def\tr@version{v0.3}
+\def\tr@version{v0.4}
 \ProvidesPackage{task-report}[2021/05/31 \tr@version task-report]
-%% Set the colors for the 4 types of standard states
+%% Set the colors for the 6 types of standard states
 \RequirePackage{tcolorbox}%
 \RequirePackage{etoolbox}%
 \RequirePackage{tocloft}
@@ -54,6 +54,25 @@
 \traddstatecolor{other}{#6}
 }%
 \trsetboxcolors{red}{yellow}{cyan}{blue}{green}{black}
+\newcommand{\traddfieldname}[2]{%
+    \expandafter\gdef\csname tr@fieldnames@\detokenize{#1}\endcsname{#2}%
+}%
+\def\tr@usesfieldname#1{%
+    \ifcsname tr@fieldnames@\detokenize{#1}\endcsname%
+    \csname tr@fieldnames@\detokenize{#1}\expandafter\endcsname%
+    \else%
+Missing Field Name%
+    \fi%
+}%
+\newcommand{\trsetfieldsnames}[6]{%
+    \traddfieldname{status}{#1}
+    \traddfieldname{assigned}{#2}
+    \traddfieldname{from}{#3}
+    \traddfieldname{to}{#4}
+    \traddfieldname{done}{#5}
+    \traddfieldname{why}{#6}
+}%
+\trsetfieldsnames{Status}{Assigned in}{From}{To}{Done in}{Rationale}
 \def\tr@currentboxcolor{\tr@usestatecolor{other}}%
 \newcommand{\trstatuscolor}[1]%
 {%
@@ -73,19 +92,16 @@
 \@ifundefined{chapter}%
 {\newlistof[section]{tasks}{trt}{\trlisttasks}}%
 {\newlistof[chapter]{tasks}{trt}{\trlisttasks}}%
-\newcommand{\trstatus}[2][Status]{%
+\newcommand{\trstatus}[2][\tr@usesfieldname{status}]{%
     \textbf{#1}: #2%
 }%
-\newcommand{\trwhen}[2][Assigned in]{%
+\newcommand{\trwhen}[2][\tr@usesfieldname{assigned}]{%
     \textbf{#1}: #2%
 }%
-\newcommand{\trwho}[2][To]{%
+\newcommand{\trwho}[2][\tr@usesfieldname{to}]{%
     \textbf{#1}: #2%
 }%
-\newcommand{\trwhat}[2][What]{%
-    \textbf{#1}: #2%
-}%
-\newcommand{\trwhy}[2][Rationale]{%
+\newcommand{\trwhy}[2][\tr@usesfieldname{why}]{%
     \textbf{#1}: #2%
 }%
 \newcommand{\trtask}[8][]{%
@@ -113,7 +129,7 @@
         }%
         \ifblank{#4}{}%
         {%
-            \trwho[From]{#4}\newline%
+            \trwho[\tr@usesfieldname{from}]{#4}\newline%
         }%
         \ifblank{#5}{}%
         {%
@@ -121,11 +137,11 @@
         }%
         \ifblank{#6}{}%
         {%
-        \trwhy{#6}\newline%
+            \trwhy{#6}\newline%
         }%
         \ifblank{#7}{}%
         {%
-            \trwhen[Done in]{#7}\newline%
+            \trwhen[\tr@usesfieldname{done}]{#7}\newline%
         }%
         \ifblank{#8}{}%
         {\tcblower%

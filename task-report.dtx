@@ -17,7 +17,7 @@
 %
 %\iffalse
 %<package>\NeedsTeXFormat{LaTeX2e}
-%<package>\def\tr@version{v0.3}
+%<package>\def\tr@version{v0.4}
 %<package>\ProvidesPackage{task-report}[2021/05/31 \tr@version task-report]
 %<*driver>
 \documentclass{ltxdoc}
@@ -68,7 +68,7 @@
 %</driver>
 % \fi
 %
-% \CheckSum{0}
+% \CheckSum{151}
 %
 % \CharacterTable
 %  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
@@ -89,6 +89,7 @@
 % \changes{v0.1}{2021/05/31}{First version}
 % \changes{v0.2}{2021/05/31}{User can create own states}
 % \changes{v0.3}{2021/05/31}{List of Tasks}
+% \changes{v0.4}{2021/06/01}{Allows redefining field names}
 %\maketitle
 %
 % \tableofcontents
@@ -180,23 +181,26 @@
 %\end{verbatim}
 % generates:
 %
-%\trtask[todo]{Mage coffe}{\today}{Geraldo Xexéo}{}{}{}{Please do the coffe strong}
+%\trtask[todo]{Make coffe}{\today}{Geraldo Xexéo}{}{}{}{Please do the coffe strong}
 %\trtask[doing]{Drink a coffe}{June, 1st 2021}{The Boss}{The Worker}{}{}{}
-%\trtask[tocheck]{Roast the beef}{June, 1st 2021}{The Boss}{The Worker}{\today}{}{Rare, plese}
-%\trtask[checking]{Drink another beer}{June, 1st 2021}{The Boss}{The Worker}{\today}{}{Please check if you have age to drink in your country. If not, drink orangejuice.}
-%\trtask[done]{Drink a beer}{\today}{The Boss}{The Worker}{\today}{}{}
+%\trtask[tocheck]{Roast the beef}{June, 1st 2021}{The Boss}{The Worker}{}{\today}{Rare, plese}
+%\trtask[checking]{Drink another beer}{June, 1st 2021}{The Boss}{The Worker}{}{\today}{Please check if you have age to drink in your country. If not, drink orangejuice.}
+%\trtask[done]{Drink a beer}{\today}{The Boss}{The Worker}{Because I want}{\today}{}
 %\trtask{}{}{}{}{}{}{}
 %\trtask[done]{}{}{}{}{}{}{}
-%\trtask{Grab a hot-dog}{3}{4}{5}{6}{7}{A hot dog must be done with bread and sausage}
+%\trtask[arg 1]{arg 2}{arg 3}{arg 4}{arg 5}{arg 6}{arg 7}{arg 8}
 %
 %
 % \subsection{Configuration Options}
 %\label{sec:conf}
+%
+% \subsubsection{Configuring Colors}
+%
 % \DescribeMacro{\trsetboxcolors}
-%% Set the colors for the 4 types of standard states
+%% Set the colors for the 6 types of standard states
 % Black otherwise.
 %
-% |\trsetboxcolors|\marg{todo-color}\marg{doing-color}\marg{done-color}\marg{other-color}
+% |\trsetboxcolors|\marg{todo-color}\marg{doing-color}\marg{tocheck-color}\marg{checking-color}\marg{done-color}\marg{other-color}
 %
 % The example:
 %
@@ -236,6 +240,35 @@
 %
 %
 %\trsetboxcolors{red}{yellow}{cyan}{blue}{green}{black}
+%
+%
+% \subsection{Changing Field Names}
+%
+% You can change all field names with command \DescribeMacro{\trsetfieldsnames}.
+%
+%
+% |\trsetfieldsnames|\marg{status}\marg{assigned}
+% \marg{from}\marg{to}
+% \marg{done}\marg{why}
+%
+%
+% For example:
+%
+%\begin{verbatim}
+%\trsetfieldsnames{Stage}{Demand date}{Who asked for}{To who}{Ready in}{Reasons}
+%\trtask[done]{Drink a coffe}{\today}{The Boss}{The Worker}%
+%{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+%\end{verbatim}
+%
+% generates:
+%
+%\trsetfieldsnames{Stage}{Demand date}{Who asked for}{To who}{Ready in}{Reasons}
+%\trtask[done]{Drink a coffe}{\today}{The Boss}{The Worker}%
+%{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+%
+% This command can be used to internationalization.
+%
+%\trsetfieldsnames{Status}{Assigned in}{From}{To}{Done in}{Rationale}
 %
 % \subsection{Creating New States}
 %
@@ -377,6 +410,59 @@
 \trsetboxcolors{red}{yellow}{cyan}{blue}{green}{black}
 %    \end{macrocode}
 %
+%
+% \subsection{Managing The Fields Names}
+%
+% \begin{macro}{\traddfieldname}
+% \begin{macro}{\tr@usesfieldname}
+%
+% Define field names - does not create a new field
+%
+%    \begin{macrocode}
+\newcommand{\traddfieldname}[2]{%
+    \expandafter\gdef\csname tr@fieldnames@\detokenize{#1}\endcsname{#2}%
+}%
+%
+\def\tr@usesfieldname#1{%
+    \ifcsname tr@fieldnames@\detokenize{#1}\endcsname%
+    \csname tr@fieldnames@\detokenize{#1}\expandafter\endcsname%
+    \else%
+Missing Field Name%
+    \fi%
+}%
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\trsetboxcolors}
+%
+% Set the colors for the 6 types of standard states
+% Black otherwise.
+%
+% |\trsetfieldsnames|\marg{status}\marg{assigned}
+% \marg{from}\marg{to}
+% \marg{done}\marg{why}
+%
+%    \begin{macrocode}
+\newcommand{\trsetfieldsnames}[6]{%
+    \traddfieldname{status}{#1}
+    \traddfieldname{assigned}{#2}
+    \traddfieldname{from}{#3}
+    \traddfieldname{to}{#4}
+    \traddfieldname{done}{#5}
+    \traddfieldname{why}{#6}
+}%
+%    \end{macrocode}
+% \end{macro}
+% \subsection{Standard Field Names}
+%
+% Sets the standard text for the fields
+%
+%    \begin{macrocode}
+\trsetfieldsnames{Status}{Assigned in}{From}{To}{Done in}{Rationale}
+%    \end{macrocode}
+%
+%
 % \begin{macro}{\tr@currentboxcolor}
 %
 % The dirt trick of using a global variable to
@@ -429,30 +515,25 @@
 % \begin{macro}{\trstatus}
 % \begin{macro}{\trwhen}
 % \begin{macro}{\trwhy}
-% \begin{macro}{\trwhat}
 % \begin{macro}{\trwho}
 %
 % Helpers to build the task
 %
 %    \begin{macrocode}
-\newcommand{\trstatus}[2][Status]{%
+\newcommand{\trstatus}[2][\tr@usesfieldname{status}]{%
     \textbf{#1}: #2%
 }%
-\newcommand{\trwhen}[2][Assigned in]{%
+\newcommand{\trwhen}[2][\tr@usesfieldname{assigned}]{%
     \textbf{#1}: #2%
 }%
-\newcommand{\trwho}[2][To]{%
+\newcommand{\trwho}[2][\tr@usesfieldname{to}]{%
     \textbf{#1}: #2%
 }%
-\newcommand{\trwhat}[2][What]{%
-    \textbf{#1}: #2%
-}%
-\newcommand{\trwhy}[2][Rationale]{%
+\newcommand{\trwhy}[2][\tr@usesfieldname{why}]{%
     \textbf{#1}: #2%
 }%
 %
 %    \end{macrocode}
-% \end{macro}
 % \end{macro}
 % \end{macro}
 % \end{macro}
@@ -507,7 +588,7 @@
         }%
         \ifblank{#4}{}%
         {%
-            \trwho[From]{#4}\newline%
+            \trwho[\tr@usesfieldname{from}]{#4}\newline%
         }%
         \ifblank{#5}{}%
         {%
@@ -515,11 +596,11 @@
         }%
         \ifblank{#6}{}%
         {%
-        \trwhy{#6}\newline%
+            \trwhy{#6}\newline%
         }%
         \ifblank{#7}{}%
         {%
-            \trwhen[Done in]{#7}\newline%
+            \trwhen[\tr@usesfieldname{done}]{#7}\newline%
         }%
         \ifblank{#8}{}%
         {\tcblower%
@@ -529,6 +610,10 @@
 }%
 %    \end{macrocode}
 % \end{macro}
+%
+%
+%
+%
 % \Finale
 %
 % \endinput
