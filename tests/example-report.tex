@@ -1,0 +1,92 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{tocloft}
+\usepackage{../task-report}
+\usepackage{hyperref}
+\author{Geraldo Xexéo}
+\title{My tasks}
+
+
+\begin{document}
+\maketitle
+
+\section{Model Task}
+\trtask[status]{name}{date assigned}{The Boss}{The Worker}{Why you need}{data done}{Extra text, comments and etc.}
+
+\section{Standard Tasks}
+\trtask[todo]{Drink a coffe}{\today}{The Boss}{The Worker}%
+{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+\trtask[doing]{Drink a coffe}{\today}{The Boss}{The Worker}%
+{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+\trtask[tocheck]{Drink a coffe}{\today}{The Boss}{The Worker}%
+{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+\trtask[checking]{Drink a coffe}{\today}{The Boss}{The Worker}%
+{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+\trtask[done]{Drink a coffe}{\today}{The Boss}{The Worker}%
+{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+\trtask{Drink a coffe}{\today}{The Boss}{The Worker}%
+{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+
+\section{New state waiting is teal}
+
+\traddstatecolor{waiting}{teal}
+\trtask[waiting]{Drink a coffe}{\today}{The Boss}{The Worker}%
+{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+
+
+\section{New Colors}
+\trsetboxcolors{magenta}{purple}{orange}{pink}{lime}{pink}
+\trtask[todo]{Drink a coffe}{\today}{The Boss}{The Worker}%
+{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+\trtask[doing]{Drink a coffe}{\today}{The Boss}{The Worker}%
+{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+\trtask[tocheck]{Drink a coffe}{\today}{The Boss}{The Worker}%
+{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+\trtask[checking]{Drink a coffe}{\today}{The Boss}{The Worker}%
+{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+\trtask[done]{Drink a coffe}{\today}{The Boss}{The Worker}%
+{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+\trtask{Drink a coffe}{\today}{The Boss}{The Worker}%
+{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+
+
+\section{Recover Original Colors}
+\trsetboxcolors{red}{yellow}{cyan}{blue}{green}{black}
+\trtask[todo]{Drink a coffe}{\today}{The Boss}{The Worker}%
+{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+\trtask[doing]{Drink a coffe}{\today}{The Boss}{The Worker}%
+{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+\trtask[tocheck]{Drink a coffe}{\today}{The Boss}{The Worker}%
+{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+\trtask[checking]{Drink a coffe}{\today}{The Boss}{The Worker}%
+{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+\trtask[done]{Drink a coffe}{\today}{The Boss}{The Worker}%
+{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+\trtask{Drink a coffe}{\today}{The Boss}{The Worker}%
+{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+
+\section{Missing Arguments}
+\trtask[]{Drink a coffe}{\today}{The Boss}{The Worker}%
+{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+\trtask[todo]{}{\today}{The Boss}{The Worker}%
+{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+\trtask[doing]{Drink a coffe}{}{The Boss}{The Worker}%
+{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+\trtask[tocheck]{Drink a coffe}{\today}{}{The Worker}%
+{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+\trtask[checking]{Drink a coffe}{\today}{The Boss}{}%
+{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+\trtask[done]{Drink a coffe}{\today}{The Boss}{The Worker}%
+{}{\today}{Coffe must be strong and add 1 spoon of sugar}
+\trtask[waiting]{Drink a coffe}{\today}{The Boss}{The Worker}%
+{To keep awake}{}{Coffe must be strong and add 1 spoon of sugar}
+\trtask[]{Drink a coffe}{\today}{The Boss}{The Worker}%
+{To keep awake}{\today}{}
+
+\newpage
+\setlength{\cfttasksnumwidth}{20pt}
+\trsettasklisttitle{Lista de Tarefas}
+\newpage
+\listoftasks
+\end{document}

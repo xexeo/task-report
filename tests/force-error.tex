@@ -1,10 +1,7 @@
 \documentclass[12pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage[brazilian]{babel}
-\usepackage{coop-writing}
-\usepackage{task-report}
-\cwautor{xexeo}{red}{Xexéo}
+\usepackage{../task-report}
 \author{Geraldo Xexéo}
 \title{My tasks}
 
@@ -15,6 +12,12 @@
 \section{Model Task}
 \trtask[status]{name}{date assigned}{The Boss}{The Worker}{Why you need}{data done}{Extra text, comments and etc.}
 
-\section{My Tasks}
+\section{New state waiting is teal}
+
+\traddstatecolor{waiting}{cordeburroquandofoge}
+\trtask[waiting]{Drink a coffe}{\today}{The Boss}{The Worker}%
+{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+
+
 
 \end{document}

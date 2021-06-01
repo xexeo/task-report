@@ -17,12 +17,13 @@
 %
 %\iffalse
 %<package>\NeedsTeXFormat{LaTeX2e}
-%<package>\def\tr@version{v0.2}
+%<package>\def\tr@version{v0.3}
 %<package>\ProvidesPackage{task-report}[2021/05/31 \tr@version task-report]
 %<*driver>
 \documentclass{ltxdoc}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
+\usepackage{lmodern}
 \usepackage{csquotes}
 \usepackage[brazilian,english]{babel}
 \usepackage{datetime}
@@ -33,6 +34,7 @@
 \usepackage[backend=biber,style=alphabetic,natbib]{biblatex}
 \usepackage[editing]{coop-writing}
 \usepackage{task-report}
+\setlength{\cfttasksnumwidth}{25pt}
 \usepackage{hyperref}
 \cwnamedef{xexeo}{red}{Xexéo}
 %
@@ -60,6 +62,8 @@
     \PrintChanges
     \newpage
     \PrintIndex
+    \newpage
+    \listoftasks
 \end{document}
 %</driver>
 % \fi
@@ -84,6 +88,7 @@
 %
 % \changes{v0.1}{2021/05/31}{First version}
 % \changes{v0.2}{2021/05/31}{User can create own states}
+% \changes{v0.3}{2021/05/31}{List of Tasks}
 %\maketitle
 %
 % \tableofcontents
@@ -151,7 +156,6 @@
 % \section{Usage}
 %
 % \DescribeMacro{\trtask}
-%
 % This is the main macro for the package.
 %|\trtask|\oarg{status}\marg{name}\marg{when-assigned}
 % \marg{who-assigned}\marg{to-who-assigned}
@@ -235,22 +239,50 @@
 %
 % \subsection{Creating New States}
 %
-% Users can create their own state using
+% Users can create their own state using  \DescribeMacro{\traddstatecolor}
 %
 % |\traddstatecolor|\marg{state}\marg{color}
+%
+% For example:
+%
+%\begin{verbatim}
+%\traddstatecolor{waiting}{teal}
+%\trtask[waiting]{Drink a coffe}{\today}{The Boss}{The Worker}%
+%{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+%\end{verbatim}
+%
+% generates:
 %
 %\traddstatecolor{waiting}{teal}
 %\trtask[waiting]{Drink a coffe}{\today}{The Boss}{The Worker}%
 %{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+%
+% \section{The List of Tasks}
+%
+% \DescribeMacro{\listoftasks}
+% A list of tasks can be generated with the command:
+%
+% |\listoftasks|
+%
+%
+% Its title can be changed with the command:
+%
+% |\trsettasklisttitle|\marg{new-title}
+%
+% The command:
+%
+% |\setlength{\cfttasksnumwidth}{25pt}|
+%
+% from package |tocloft| can be used to set the space used by
+% the section indicator.
+%
+%
 %
 %\section{Warnings}
 % This package uses another package that changes \LaTeX's standard behavior for summary and lists. When you use it, you must explicitly change pages with |\newpage|
 % before |\tableofcontents| or similar commands.
 %
 % \section{Implementation}
-% This package was initially written in Portuguese. As it become more
-% useful, it was translated to English. There are still some signs
-% of this in the code.
 %
 % \StopEventually{End of Code}
 %
@@ -260,12 +292,13 @@
 %\begin{itemize}
 %    \item |mdframed| makes the frame aroung tasks
 %    \item |etoolbox| command ifstringempty
+%    \item |tocloft|  create the list of tasks
 %\end{itemize}
 %
 %    \begin{macrocode}
 \RequirePackage{tcolorbox}%
 \RequirePackage{etoolbox}%
-\RequirePackage{xstring}%
+\RequirePackage{tocloft}
 %    \end{macrocode}
 %
 % \subsection{Access to the current version}
@@ -284,28 +317,35 @@
 %    \end{macrocode}
 % \end{macro}
 %
-% \subsection{Color Management for Standard States}
+% \subsection{Color Management for States}
 %
-% \begin{macro}{\tr@todoboxcolor}
-% \begin{macro}{\tr@doingboxcolor}
-% \begin{macro}{\tr@doneboxcolor}
-% \begin{macro}{\tr@tocheckboxcolor}
-% \begin{macro}{\tr@checkingboxcolor}
-% \begin{macro}{\tr@otherwisecolor}
-% Global variables for the box colors.
+% \subsection{Defining States Through a Simulated List}
 %
-%%    \begin{macrocode}
-\def\tr@todoboxcolor{red}%
-\def\tr@doingboxcolor{yellow}%
-\def\tr@tocheckboxcolor{cyan}%
-\def\tr@checkingboxcolor{blue}%
-\def\tr@doneboxcolor{green}%
-\def\tr@otherwisecolor{black}%
+% \begin{macro}{\traddstatecolor}
+% \begin{macro}{\usestatecolor}
+%
+% Inserts states and their colors in a simulated list and uses them
+%
+%    \begin{macrocode}
+\newcommand{\traddstatecolor}[2]{%
+    \@ifundefined{\string\color@#2}%
+    {%
+        \message{#2 not defined}%
+        \expandafter\ERROR%
+    }%
+    {%
+        \expandafter\gdef\csname tr@astate@\detokenize{#1}\endcsname{#2}%
+}%
+}%
+%
+\def\tr@usestatecolor#1{%
+    \ifcsname tr@astate@\detokenize{#1}\endcsname%
+    \csname tr@astate@\detokenize{#1}\expandafter\endcsname%
+    \else%
+\tr@astate@other%
+    \fi%
+}%
 %    \end{macrocode}
-% \end{macro}
-% \end{macro}
-% \end{macro}
-% \end{macro}
 % \end{macro}
 % \end{macro}
 %
@@ -314,19 +354,28 @@
 % Set the colors for the 6 types of standard states
 % Black otherwise.
 %
-% |\trsetboxcolors|\marg{todo-color}\marg{doing-color}\marg{tocheck-color}\marg{checking-color}\marg{done-color}\marg{other-color}
+% |\trsetboxcolors|\marg{todo-color}\marg{doing-color}
+% \marg{tocheck-color}\marg{checking-color}
+% \marg{done-color}\marg{other-color}
 %
 %    \begin{macrocode}
 \newcommand{\trsetboxcolors}[6]{%
-\def\tr@todoboxcolor{#1}%
-\def\tr@doingboxcolor{#2}%
-\def\tr@tocheckboxcolor{#3}%
-\def\tr@checkingcolor{#4}%
-\def\tr@doneboxcolor{#5}%
-\def\tr@otherwisecolor{#6}%
+\traddstatecolor{todo}{#1}
+\traddstatecolor{doing}{#2}
+\traddstatecolor{tocheck}{#3}
+\traddstatecolor{checking}{#4}
+\traddstatecolor{done}{#5}
+\traddstatecolor{other}{#6}
 }%
 %    \end{macrocode}
 % \end{macro}
+% \subsection{Standard Colors}
+%
+% Sets the standard colors for the standard states
+%
+%    \begin{macrocode}
+\trsetboxcolors{red}{yellow}{cyan}{blue}{green}{black}
+%    \end{macrocode}
 %
 % \begin{macro}{\tr@currentboxcolor}
 %
@@ -334,37 +383,11 @@
 % store a value
 %
 %    \begin{macrocode}
-\def\tr@currentboxcolor{\tr@otherwisecolor}%
+\def\tr@currentboxcolor{\tr@usestatecolor{other}}%
 %    \end{macrocode}
 % \end{macro}
 %
 %
-% \subsection{User-defined states}
-%
-%
-% \begin{macro}{\traddstatecolor}
-% \begin{macro}{\usestatecolor}
-%    \begin{macrocode}
-\def\traddstatecolor#1#2{%
-\@ifundefined{\string\color@#2}{%
-\message{#2 not defined}%
-\ERROR%
-}%
-{%
-\expandafter\gdef\csname%
-tr@astate@\detokenize{#1}\endcsname{#2}%
-}}%
-%
-\def\tr@usestatecolor#1{%
-\ifcsname tr@astate@\detokenize{#1}\endcsname%
-\csname tr@astate@\detokenize{#1}\expandafter\endcsname%
-\else%
-\tr@otherwisecolor%
-\fi%
-}%
-%    \end{macrocode}
-% \end{macro}
-% \end{macro}
 %
 % \begin{macro}{\trstatuscolor}
 %
@@ -375,22 +398,29 @@ tr@astate@\detokenize{#1}\endcsname{#2}%
 %    \begin{macrocode}
 \newcommand{\trstatuscolor}[1]%
 {%
-    \def\tr@currentboxcolor{\tr@otherwisecolor}%
-    \ifblank{#1}{}{%
-    \IfStrEqCase{#1}{%
-    {todo}{\def\tr@currentboxcolor{\tr@todoboxcolor}}%
-    {doing}{\def\tr@currentboxcolor{\tr@doingboxcolor}}%
-    {done}{\def\tr@currentboxcolor{\tr@doneboxcolor}}%
-    {tocheck}{\def\tr@currentboxcolor{\tr@tocheckboxcolor}}%
-    {checking}{\def\tr@currentboxcolor{\tr@checkingboxcolor}}%
-    } [%
-    \def\tr@currentboxcolor{\tr@usestatecolor{#1}}
-]%
-    }%
+\ifblank{#1}%
+{%
+\def\tr@currentboxcolor{\tr@usestatecolor{other}}%
+}%
+{%
+\def\tr@currentboxcolor{\tr@usestatecolor{#1}}%
+}%
 }%
 %    \end{macrocode}
 % \end{macro}
 %
+%
+% \section{List of Tasks}
+%    \begin{macrocode}
+\newcommand{\trsettasklisttitle}[1]{%
+    \def\trlisttasks{#1}%
+}%
+\trsettasklisttitle{List of Tasks}%
+%% cria a lista, depende do pacoto tcloft
+\@ifundefined{chapter}%
+{\newlistof[section]{tasks}{trt}{\trlisttasks}}%
+{\newlistof[chapter]{tasks}{trt}{\trlisttasks}}%
+%    \end{macrocode}
 %
 % \subsection{Declaring Tasks}
 %
@@ -455,11 +485,13 @@ tr@astate@\detokenize{#1}\endcsname{#2}%
 \newcommand{\trtask}[8][]{%
     \par%
     \ifblank{#2}{
-    \def\trtask@temp{Task not defined}%
+    \def\trtask@temp{Task without a name}%
     }%
     {%
     \def\trtask@temp{#2}%
     }%
+    \refstepcounter{tasks}%
+    \addcontentsline{trt}{tasks}{\protect\numberline{\thetasks}{\trtask@temp}}%
     \trstatuscolor{#1}%
     \begin{tcolorbox}[title=\textbf{\trtask@temp},%
          colback=\tr@currentboxcolor!5!white,%
