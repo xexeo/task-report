@@ -28,6 +28,7 @@
 \RequirePackage{xstring}%
 \newcommand{\taskreportversion}{\tr@version}%
 \newcommand{\printtaskreportversion}{task-report v. \taskreportversion}%
+%%    \begin{macrocode}
 \def\tr@todoboxcolor{red}%
 \def\tr@doingboxcolor{yellow}%
 \def\tr@tocheckboxcolor{cyan}%
@@ -43,17 +44,35 @@
 \def\tr@otherwisecolor{#6}%
 }%
 \def\tr@currentboxcolor{\tr@otherwisecolor}%
+\def\traddstatecolor#1#2{%
+\@ifundefined{\string\color@#2}{%
+\message{#2 not defined}%
+\ERROR%
+}%
+{%
+\expandafter\gdef\csname%
+tr@astate@\detokenize{#1}\endcsname{#2}%
+}}%
+\def\tr@usestatecolor#1{%
+\ifcsname tr@astate@\detokenize{#1}\endcsname%
+\csname tr@astate@\detokenize{#1}\expandafter\endcsname%
+\else%
+\tr@otherwisecolor%
+\fi%
+}%
 \newcommand{\trstatuscolor}[1]%
 {%
     \def\tr@currentboxcolor{\tr@otherwisecolor}%
-    \ifstrempty{#1}{}{%
+    \ifblank{#1}{}{%
     \IfStrEqCase{#1}{%
     {todo}{\def\tr@currentboxcolor{\tr@todoboxcolor}}%
     {doing}{\def\tr@currentboxcolor{\tr@doingboxcolor}}%
     {done}{\def\tr@currentboxcolor{\tr@doneboxcolor}}%
     {tocheck}{\def\tr@currentboxcolor{\tr@tocheckboxcolor}}%
     {checking}{\def\tr@currentboxcolor{\tr@checkingboxcolor}}%
-    }%
+    } [%
+    \def\tr@currentboxcolor{\tr@usestatecolor{#1}}
+]%
     }%
 }%
 \newcommand{\trstatus}[2][Status]{%
@@ -73,7 +92,7 @@
 }%
 \newcommand{\trtask}[8][]{%
     \par%
-    \ifstrempty{#2}{
+    \ifblank{#2}{
     \def\trtask@temp{Task not defined}%
     }%
     {%
@@ -84,31 +103,31 @@
          colback=\tr@currentboxcolor!5!white,%
          colframe=\tr@currentboxcolor!75!black%
         ]%
-        \ifstrempty{#1}{}%
+        \ifblank{#1}{}%
         {%
             \trstatus{#1}\newline%
         }%
-        \ifstrempty{#3}{}%
+        \ifblank{#3}{}%
         {%
             \trwhen{#3}\newline%
         }%
-        \ifstrempty{#4}{}%
+        \ifblank{#4}{}%
         {%
             \trwho[From]{#4}\newline%
         }%
-        \ifstrempty{#5}{}%
+        \ifblank{#5}{}%
         {%
             \trwho{#5}\newline%
         }%
-        \ifstrempty{#6}{}%
+        \ifblank{#6}{}%
         {%
         \trwhy{#6}\newline%
         }%
-        \ifstrempty{#7}{}%
+        \ifblank{#7}{}%
         {%
             \trwhen[Done in]{#7}\newline%
         }%
-        \ifstrempty{#8}{}%
+        \ifblank{#8}{}%
         {\tcblower%
         #8%
         }%

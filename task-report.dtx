@@ -17,7 +17,7 @@
 %
 %\iffalse
 %<package>\NeedsTeXFormat{LaTeX2e}
-%<package>\def\tr@version{v0.1}
+%<package>\def\tr@version{v0.2}
 %<package>\ProvidesPackage{task-report}[2021/05/31 \tr@version task-report]
 %<*driver>
 \documentclass{ltxdoc}
@@ -83,6 +83,7 @@
 %   Right brace   \}     Tilde         \~}
 %
 % \changes{v0.1}{2021/05/31}{First version}
+% \changes{v0.2}{2021/05/31}{User can create own states}
 %\maketitle
 %
 % \tableofcontents
@@ -232,6 +233,16 @@
 %
 %\trsetboxcolors{red}{yellow}{cyan}{blue}{green}{black}
 %
+% \subsection{Creating New States}
+%
+% Users can create their own state using
+%
+% |\traddstatecolor|\marg{state}\marg{color}
+%
+%\traddstatecolor{waiting}{teal}
+%\trtask[waiting]{Drink a coffe}{\today}{The Boss}{The Worker}%
+%{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+%
 %\section{Warnings}
 % This package uses another package that changes \LaTeX's standard behavior for summary and lists. When you use it, you must explicitly change pages with |\newpage|
 % before |\tableofcontents| or similar commands.
@@ -273,7 +284,7 @@
 %    \end{macrocode}
 % \end{macro}
 %
-% \subsection{Color Management}
+% \subsection{Color Management for Standard States}
 %
 % \begin{macro}{\tr@todoboxcolor}
 % \begin{macro}{\tr@doingboxcolor}
@@ -283,7 +294,7 @@
 % \begin{macro}{\tr@otherwisecolor}
 % Global variables for the box colors.
 %
-%    \begin{macrocode}
+%%    \begin{macrocode}
 \def\tr@todoboxcolor{red}%
 \def\tr@doingboxcolor{yellow}%
 \def\tr@tocheckboxcolor{cyan}%
@@ -327,6 +338,34 @@
 %    \end{macrocode}
 % \end{macro}
 %
+%
+% \subsection{User-defined states}
+%
+%
+% \begin{macro}{\traddstatecolor}
+% \begin{macro}{\usestatecolor}
+%    \begin{macrocode}
+\def\traddstatecolor#1#2{%
+\@ifundefined{\string\color@#2}{%
+\message{#2 not defined}%
+\ERROR%
+}%
+{%
+\expandafter\gdef\csname%
+tr@astate@\detokenize{#1}\endcsname{#2}%
+}}%
+%
+\def\tr@usestatecolor#1{%
+\ifcsname tr@astate@\detokenize{#1}\endcsname%
+\csname tr@astate@\detokenize{#1}\expandafter\endcsname%
+\else%
+\tr@otherwisecolor%
+\fi%
+}%
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
 % \begin{macro}{\trstatuscolor}
 %
 % Select the color based on the state
@@ -337,14 +376,16 @@
 \newcommand{\trstatuscolor}[1]%
 {%
     \def\tr@currentboxcolor{\tr@otherwisecolor}%
-    \ifstrempty{#1}{}{%
+    \ifblank{#1}{}{%
     \IfStrEqCase{#1}{%
     {todo}{\def\tr@currentboxcolor{\tr@todoboxcolor}}%
     {doing}{\def\tr@currentboxcolor{\tr@doingboxcolor}}%
     {done}{\def\tr@currentboxcolor{\tr@doneboxcolor}}%
     {tocheck}{\def\tr@currentboxcolor{\tr@tocheckboxcolor}}%
     {checking}{\def\tr@currentboxcolor{\tr@checkingboxcolor}}%
-    }%
+    } [%
+    \def\tr@currentboxcolor{\tr@usestatecolor{#1}}
+]%
     }%
 }%
 %    \end{macrocode}
@@ -413,7 +454,7 @@
 %  [status] , what, when-assigned, from-who, to-who, why, when-done, extra
 \newcommand{\trtask}[8][]{%
     \par%
-    \ifstrempty{#2}{
+    \ifblank{#2}{
     \def\trtask@temp{Task not defined}%
     }%
     {%
@@ -424,31 +465,31 @@
          colback=\tr@currentboxcolor!5!white,%
          colframe=\tr@currentboxcolor!75!black%
         ]%
-        \ifstrempty{#1}{}%
+        \ifblank{#1}{}%
         {%
             \trstatus{#1}\newline%
         }%
-        \ifstrempty{#3}{}%
+        \ifblank{#3}{}%
         {%
             \trwhen{#3}\newline%
         }%
-        \ifstrempty{#4}{}%
+        \ifblank{#4}{}%
         {%
             \trwho[From]{#4}\newline%
         }%
-        \ifstrempty{#5}{}%
+        \ifblank{#5}{}%
         {%
             \trwho{#5}\newline%
         }%
-        \ifstrempty{#6}{}%
+        \ifblank{#6}{}%
         {%
         \trwhy{#6}\newline%
         }%
-        \ifstrempty{#7}{}%
+        \ifblank{#7}{}%
         {%
             \trwhen[Done in]{#7}\newline%
         }%
-        \ifstrempty{#8}{}%
+        \ifblank{#8}{}%
         {\tcblower%
         #8%
         }%
