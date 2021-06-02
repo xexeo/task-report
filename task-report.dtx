@@ -17,7 +17,7 @@
 %
 %\iffalse
 %<package>\NeedsTeXFormat{LaTeX2e}
-%<package>\def\tr@version{v0.4}
+%<package>\def\tr@version{v0.5}
 %<package>\ProvidesPackage{task-report}[2021/05/31 \tr@version task-report]
 %<*driver>
 \documentclass{ltxdoc}
@@ -68,7 +68,7 @@
 %</driver>
 % \fi
 %
-% \CheckSum{150}
+% \CheckSum{172}
 %
 % \CharacterTable
 %  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
@@ -87,9 +87,10 @@
 %   Right brace   \}     Tilde         \~}
 %
 % \changes{v0.1}{2021/05/31}{First version}
-% \changes{v0.2}{2021/05/31}{User can create own states}
+% \changes{v0.2}{2021/05/31}{User can create new states}
 % \changes{v0.3}{2021/05/31}{List of Tasks}
 % \changes{v0.4}{2021/06/01}{Allows redefining field names}
+% \changes{v0.5}{2021/06/01}{Allows redefining header and colon}
 %\maketitle
 %
 % \tableofcontents
@@ -200,7 +201,8 @@
 %% Set the colors for the 6 types of standard states
 % Black otherwise.
 %
-% |\trsetboxcolors|\marg{todo-color}\marg{doing-color}\marg{tocheck-color}\marg{checking-color}\marg{done-color}\marg{other-color}
+% |\trsetboxcolors|\marg{todo-color}\marg{doing-color}\marg{tocheck-color}\marg{checking-color}
+%\marg{done-color}\marg{other-color}
 %
 % The example:
 %
@@ -269,7 +271,42 @@
 %{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
 %
 %
-%\trsetfieldsnames{Status}{Assigned in}{From}{To}{Done in}{Rationale}
+%\trsetfieldsnames{Status}{Due date}{Assigned in}{From}{To}{Done in}{Rationale}
+%
+%
+% \subsection{Modifying the Header}
+%
+% \DescribeMacro{\trsettitlelabel} Sets the label for the header.
+%
+% |\trsettitlelabel|\marg{label-for-header}
+%
+%\begin{verbatim}
+% \trsettitlelabel{Task}
+%
+%\trtask[done]{Drink a coffe}{5 days}{\today}{The Boss}{The Worker}
+%{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+%
+%\end{verbatim}
+%
+% \trsettitlelabel{Task}
+%
+%\trtask[done]{Drink a coffe}{5 days}{\today}{The Boss}{The Worker}
+%{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+%
+% Back to normal:
+%
+%\begin{verbatim}
+% \trsettitlelabel{}
+%
+%\trtask[done]{Drink a coffe}{5 days}{\today}{The Boss}{The Worker}
+%{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+%\end{verbatim}
+%
+%
+% \trsettitlelabel{}
+%
+%\trtask[done]{Drink a coffe}{5 days}{\today}{The Boss}{The Worker}
+%{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
 %
 % \subsection{Creating New States}
 %
@@ -288,7 +325,8 @@
 % generates:
 %
 %\traddstatecolor{waiting}{teal}
-%\trtask[waiting]{Drink a coffe}{\today}{The Boss}{The Worker}%
+%\trtask[waiting]{Drink a coffe}{ASAP}{\today}%
+%{The Boss}{The Worker}%
 %{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
 %
 % \section{The List of Tasks}
@@ -347,7 +385,7 @@
 % \begin{macro}{\printtaskreportversion}
 % Provides package name and version
 %    \begin{macrocode}
-\newcommand{\printtaskreportversion}{task-report v. \taskreportversion}%
+\newcommand{\printtaskreportversion}{task-report \taskreportversion}%
 %    \end{macrocode}
 % \end{macro}
 %
@@ -435,34 +473,56 @@ Missing Field Name%
 % \end{macro}
 % \end{macro}
 %
-% \begin{macro}{\trsetboxcolors}
+% \subsection{Standard Field Names}
 %
-% Set the colors for the 6 types of standard states
-% Black otherwise.
+% Sets the standard text for the fields
+%
+% \begin{macro}{\trsetfieldsnames}
+% \begin{macro}{\trsettitlelabel}
+%
+% Set the names for the field names and for the titles.
 %
 % |\trsetfieldsnames|\marg{status}\marg{duedate}\marg{assigned}
 % \marg{from}\marg{to}
 % \marg{done}\marg{why}
 %
+% |\trsettitlelabel|\marg{title-label}
+%
 %    \begin{macrocode}
 \newcommand{\trsetfieldsnames}[7]{%
-    \traddfieldname{status}{#1}
-    \traddfieldname{duedate}{#2}
-    \traddfieldname{assigned}{#3}
-    \traddfieldname{from}{#4}
-    \traddfieldname{to}{#5}
-    \traddfieldname{done}{#6}
-    \traddfieldname{why}{#7}
+    \traddfieldname{status}{#1}%
+    \traddfieldname{duedate}{#2}%
+    \traddfieldname{assigned}{#3}%
+    \traddfieldname{from}{#4}%
+    \traddfieldname{to}{#5}%
+    \traddfieldname{done}{#6}%
+    \traddfieldname{why}{#7}%
 }%
+%
+\traddfieldname{defaulttitle}{Task without a name}%
+%
+\def\tr@defaulttitlelabel{}%
+\newcommand{\trsettitlelabel}[1]{%
+    \def\tr@defaulttitlelabel{#1}%
+}%
+%
+\trsetfieldsnames{Status}{Due date}{Assigned in}{From}{To}{Done in}{Rationale}
+%
+%    \end{macrocode}
+%
+% \end{macro}
+% \end{macro}
+%
+%
+% \begin{macro}{\trsetcolon}
+%    \begin{macrocode}
+\newcommand{\trsetcolon}[1]{%
+    \traddfieldname{colonmark}{#1}
+}
+\trsetcolon{:}
 %    \end{macrocode}
 % \end{macro}
-% \subsection{Standard Field Names}
 %
-% Sets the standard text for the fields
-%
-%    \begin{macrocode}
-\trsetfieldsnames{Status}{Due date}{Assigned in}{From}{To}{Done in}{Rationale}
-%    \end{macrocode}
 %
 %
 % \begin{macro}{\tr@currentboxcolor}
@@ -517,13 +577,20 @@ Missing Field Name%
 % \begin{macro}{\tr@field}
 %
 % Helpers to build the task
+% |\trtitle| should be improved to chack if
+% |\tr@defaulttitlelabel| is not empty and use it
 %
 %    \begin{macrocode}
-\newcommand{\tr@title}[2]{%
-    \textbf{#1}: #2%
+\newcommand{\tr@title}[1]{%
+\ifx\tr@defaulttitlelabel\empty%
+\textbf{#1}%
+\else%
+\textbf{\tr@defaulttitlelabel\tr@usesfieldname{colonmark}\  #1}%
+\fi%
 }%
+%
 \newcommand{\tr@field}[2]{%
-\textbf{#1}: #2%
+\textbf{#1}\tr@usesfieldname{colonmark} #2%
 }%
 %
 %    \end{macrocode}
@@ -558,7 +625,7 @@ Missing Field Name%
 \newcommand{\trtask}[9][]{%
     \par%
     \ifblank{#2}{
-    \def\trtask@temp{Task without a name}%
+    \def\trtask@temp{\tr@usesfieldname{defaulttitle}}%
     }%
     {%
     \def\trtask@temp{#2}%
@@ -566,10 +633,10 @@ Missing Field Name%
     \refstepcounter{tasks}%
     \addcontentsline{trt}{tasks}{\protect\numberline{\thetasks}{\trtask@temp}}%
     \trstatuscolor{#1}%
-    \begin{tcolorbox}[title=\textbf{\trtask@temp},%
-         colback=\tr@currentboxcolor!5!white,%
-         colframe=\tr@currentboxcolor!75!black%
-        ]%
+    \begin{tcolorbox}[title=\tr@title{\trtask@temp},%
+colback=\tr@currentboxcolor!5!white,%
+colframe=\tr@currentboxcolor!75!black%
+]%
         \ifblank{#1}{}%
         {%
             \tr@field{\tr@usesfieldname{status}}{#1}\newline%
