@@ -254,5 +254,3 @@ TSWLatexianTemp*
 # standalone packages
 *.sta
 *.trt
-tests/mytasks.tex
-tests/mytasks.pdf
