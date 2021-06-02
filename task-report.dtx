@@ -197,8 +197,10 @@
 %\trtask[arg 1]{arg 2}{arg 3}{arg 4}{arg 5}{arg 6}{arg 7}{arg 8}{arg 9}
 %
 %
-% \subsubsection{Configuring Colors}
+% \section{Configuration}
 %
+% \subsection{Configuring Colors}
+%\label{sec:conf}
 % \DescribeMacro{\trsetboxcolors}
 %% Set the colors for the 6 types of standard states
 % Black otherwise.
@@ -248,7 +250,7 @@
 %\trsetboxcolors{red}{yellow}{cyan}{blue}{green}{black}
 %
 %
-% \subsubsection{Changing Field Names}
+% \subsection{Changing Field Names}
 %
 % You can change all field names with command \DescribeMacro{\trsetfieldsnames}. % This command can be used to internationalization or to make these box used by any other reason.
 %
@@ -276,7 +278,7 @@
 %\trsetfieldsnames{Status}{Due date}{Assigned in}{From}{To}{Done in}{Rationale}
 %
 %
-% \subsubsection{Modifying the Header}
+% \subsection{Modifying the Header}
 %
 % \DescribeMacro{\trsettitlelabel} Sets the label for the header.
 %
@@ -310,7 +312,7 @@
 %\trtask[done]{Drink a coffe}{5 days}{\today}{The Boss}{The Worker}
 %{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
 %
-% \subsubsection{Creating New States}
+% \subsection{Creating New States}
 %
 % Users can create their own state using  \DescribeMacro{\traddstatecolor}
 %
@@ -331,7 +333,7 @@
 %{The Boss}{The Worker}%
 %{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
 %
-% \subsection{Using Labels to Refer to Tasks}
+% \section{Using Labels to Refer to Tasks}
 %
 %  You can use labels, such as |\label{task:kanbam}| \textbf{in the last}
 % \textbf{argument}\footnote{Actually, they will probably break only if used in the second argument, that is used to name them} and refer to it with commands |\ref{task:kanbam}| (\ref{task:kanbam}),

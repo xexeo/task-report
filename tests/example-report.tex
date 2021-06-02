@@ -19,16 +19,22 @@ This document uses \printtaskreportversion.
 \section{Standard Tasks}
 \trtask[todo]{Drink a coffe}{ASAP}{\today}{The Boss}{The Worker}%
 {To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
-\trtask[doing]{Drink a coffe}{ASAP}{\today}{The Boss}{The Worker}%
-{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+\trtask[doing]{Drink dark coffe}{ASAP}{\today}{The Boss}{The Worker}%
+{To keep awake}{\today}{Coffe must be strong and no sugar\label{task:ns}}
 \trtask[tocheck]{Drink a coffe}{ASAP}{\today}{The Boss}{The Worker}%
 {To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
 \trtask[checking]{Drink a coffe}{ASAP}{\today}{The Boss}{The Worker}%
 {To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
 \trtask[done]{Drink a coffe}{ASAP}{\today}{The Boss}{The Worker}%
 {To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
-\trtask{Drink a coffe}{ASAP}{\today}{The Boss}{The Worker}%
-{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+\trtask{Drink stronger coffe}{ASAP}{\today}{The Boss}{The Worker}%
+{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar\label{task:sc}}
+
+\section{Checking references}
+
+Task \ref{task:ns}, named \nameref{task:ns}, is in page \pageref{task:ns}.
+
+Task \ref{task:sc}, named \nameref{task:sc}, is in page \pageref{task:sc}.
 
 \section{New state waiting is teal}
 
