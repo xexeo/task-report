@@ -68,7 +68,7 @@
 %</driver>
 % \fi
 %
-% \CheckSum{172}
+% \CheckSum{202}
 %
 % \CharacterTable
 %  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
@@ -91,6 +91,7 @@
 % \changes{v0.3}{2021/05/31}{List of Tasks}
 % \changes{v0.4}{2021/06/01}{Allows redefining field names}
 % \changes{v0.5}{2021/06/01}{Allows redefining header and colon}
+% \changes{v0.5}{2021/06/01}{Numbers in tasks and references}
 %\maketitle
 %
 % \tableofcontents
@@ -124,7 +125,11 @@
 %
 % \section{Package Options}
 %
-% There are no package options up to now
+% \DescribeMacro{showtasknumbers} show tasks numbers, default is false.
+%
+% Users should never refer to a task by its number, since it can change from
+% compilation to compilation if any task is inserted in among the existing ones.
+% It is possible to use the |\label| macro to refer to tasks by number, page ou name.
 %
 % \subsection{General behavior}
 %
@@ -192,9 +197,6 @@
 %\trtask[arg 1]{arg 2}{arg 3}{arg 4}{arg 5}{arg 6}{arg 7}{arg 8}{arg 9}
 %
 %
-% \subsection{Configuration Options}
-%\label{sec:conf}
-%
 % \subsubsection{Configuring Colors}
 %
 % \DescribeMacro{\trsetboxcolors}
@@ -246,7 +248,7 @@
 %\trsetboxcolors{red}{yellow}{cyan}{blue}{green}{black}
 %
 %
-% \subsection{Changing Field Names}
+% \subsubsection{Changing Field Names}
 %
 % You can change all field names with command \DescribeMacro{\trsetfieldsnames}. % This command can be used to internationalization or to make these box used by any other reason.
 %
@@ -274,7 +276,7 @@
 %\trsetfieldsnames{Status}{Due date}{Assigned in}{From}{To}{Done in}{Rationale}
 %
 %
-% \subsection{Modifying the Header}
+% \subsubsection{Modifying the Header}
 %
 % \DescribeMacro{\trsettitlelabel} Sets the label for the header.
 %
@@ -308,7 +310,7 @@
 %\trtask[done]{Drink a coffe}{5 days}{\today}{The Boss}{The Worker}
 %{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
 %
-% \subsection{Creating New States}
+% \subsubsection{Creating New States}
 %
 % Users can create their own state using  \DescribeMacro{\traddstatecolor}
 %
@@ -328,6 +330,14 @@
 %\trtask[waiting]{Drink a coffe}{ASAP}{\today}%
 %{The Boss}{The Worker}%
 %{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+%
+% \subsection{Using Labels to Refer to Tasks}
+%
+%  You can use labels, such as |\label{task:kanbam}| \textbf{in the last}
+% \textbf{argument}\footnote{Actually, they will probably break only if used in the second argument, that is used to name them} and refer to it with commands |\ref{task:kanbam}| (\ref{task:kanbam}),
+%|\pageref{task:kanbam}| (\pageref{task:kanbam}) ou |\nameref{task:kanbam}|
+% (\nameref{task:kanbam}).
+%
 %
 % \section{The List of Tasks}
 %
@@ -358,6 +368,20 @@
 %
 % \StopEventually{End of Code}
 %
+% \subsection{Options}
+% \DescribeMacro{showtasknumbers}
+%
+% Since task numbers can change between compilations
+% this default is set to |false|.
+%
+%    \begin{macrocode}
+\newif\if@showtasknumbers\@showtasknumbersfalse%
+%
+\DeclareOption{showtasknumbers}{\@showtasknumberstrue}%
+%
+\ProcessOptions\relax
+%    \end{macrocode}
+%
 % \subsection{Required Packages}
 %
 %
@@ -370,7 +394,9 @@
 %    \begin{macrocode}
 \RequirePackage{tcolorbox}%
 \RequirePackage{etoolbox}%
-\RequirePackage{tocloft}
+\RequirePackage{tocloft}%
+\RequirePackage{hyperref}%
+
 %    \end{macrocode}
 %
 % \subsection{Access to the current version}
@@ -570,6 +596,15 @@ Missing Field Name%
 {\newlistof[chapter]{tasks}{trt}{\trlisttasks}}%
 %    \end{macrocode}
 %
+%
+%
+% \subsection{A Counter for Tasks}
+%    \begin{macrocode}
+%    \end{macrocode}
+%
+%
+%
+%
 % \subsection{Declaring Tasks}
 %
 % \subsubsection{Helpers}
@@ -581,11 +616,19 @@ Missing Field Name%
 % |\tr@defaulttitlelabel| is not empty and use it
 %
 %    \begin{macrocode}
-\newcommand{\tr@title}[1]{%
+\newcommand{\tr@title}[2]{%
 \ifx\tr@defaulttitlelabel\empty%
-\textbf{#1}%
+    \if@showtasknumbers%
+        \textbf{#2\tr@usesfieldname{colonmark} #1}%
+    \else%
+        \textbf{#1}%
+    \fi%
 \else%
-\textbf{\tr@defaulttitlelabel\tr@usesfieldname{colonmark}\  #1}%
+    \if@showtasknumbers%
+        \textbf{\tr@defaulttitlelabel\ #2\tr@usesfieldname{colonmark}\  #1}%
+    \else%
+        \textbf{\tr@defaulttitlelabel\tr@usesfieldname{colonmark}\  #1}%
+    \fi%
 \fi%
 }%
 %
@@ -609,19 +652,23 @@ Missing Field Name%
 %
 % For example:
 %\begin{verbatim}
-%\trtask[doing]{Make a \LaTeX\  Kanbam document}{soon}
+%\trtask[doing]{Make a \LaTeX\ Kanbam document}{soon}
 % {2021-05-31}{Xexéo}{Geraldo Xexéo}{Help control tasks}
-% {not yet}{Use colors}
+% {not yet}{Use colors\label{task:kanbam}}
 %\end{verbatim}
 %
 % generates:
 %
-%\trtask[doing]{Make a \LaTeX   Kanbam document}{soon}
+%\trtask[doing]{Make a \LaTeX\ Kanbam document}{soon}
 % {2021-05-31}{Xexéo}{Geraldo Xexéo}{Help control tasks}
-% {not yet}{Use colors}
+% {not yet}{Use colors\label{task:kanbam}}
+%
+% It is possible to reference the task (as Task \ref{task:kanbam} in page \pageref{task:kanbam}, named \nameref{task:kanbam}).
 %
 %    \begin{macrocode}
 %  [status] , what, due-date when-assigned, from-who, to-who, why, when-done, extra
+\newcounter{taskcounter}
+%
 \newcommand{\trtask}[9][]{%
     \par%
     \ifblank{#2}{
@@ -631,9 +678,13 @@ Missing Field Name%
     \def\trtask@temp{#2}%
     }%
     \refstepcounter{tasks}%
+% \refstepcounter updates \@currentlabel (\LaTeX magic!)
+% therefore the next command must appear before #9, where label must be.
+    \refstepcounter{taskcounter}%
+    \protected@edef\@currentlabelname{\trtask@temp}% trying to make it work
     \addcontentsline{trt}{tasks}{\protect\numberline{\thetasks}{\trtask@temp}}%
     \trstatuscolor{#1}%
-    \begin{tcolorbox}[title=\tr@title{\trtask@temp},%
+    \begin{tcolorbox}[title=\tr@title{\trtask@temp}{\thetaskcounter},%
 colback=\tr@currentboxcolor!5!white,%
 colframe=\tr@currentboxcolor!75!black%
 ]%

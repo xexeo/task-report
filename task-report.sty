@@ -23,9 +23,14 @@
 \def\tr@version{v0.5}
 \ProvidesPackage{task-report}[2021/05/31 \tr@version task-report]
 %% Set the colors for the 6 types of standard states
+\newif\if@showtasknumbers\@showtasknumbersfalse%
+\DeclareOption{showtasknumbers}{\@showtasknumberstrue}%
+\ProcessOptions\relax
 \RequirePackage{tcolorbox}%
 \RequirePackage{etoolbox}%
-\RequirePackage{tocloft}
+\RequirePackage{tocloft}%
+\RequirePackage{hyperref}%
+
 \newcommand{\taskreportversion}{\tr@version}%
 \newcommand{\printtaskreportversion}{task-report \taskreportversion}%
 \newcommand{\traddstatecolor}[2]{%
@@ -102,16 +107,25 @@ Missing Field Name%
 \@ifundefined{chapter}%
 {\newlistof[section]{tasks}{trt}{\trlisttasks}}%
 {\newlistof[chapter]{tasks}{trt}{\trlisttasks}}%
-\newcommand{\tr@title}[1]{%
+\newcommand{\tr@title}[2]{%
 \ifx\tr@defaulttitlelabel\empty%
-\textbf{#1}%
+    \if@showtasknumbers%
+        \textbf{#2\tr@usesfieldname{colonmark} #1}%
+    \else%
+        \textbf{#1}%
+    \fi%
 \else%
-\textbf{\tr@defaulttitlelabel\tr@usesfieldname{colonmark}\  #1}%
+    \if@showtasknumbers%
+        \textbf{\tr@defaulttitlelabel\ #2\tr@usesfieldname{colonmark}\  #1}%
+    \else%
+        \textbf{\tr@defaulttitlelabel\tr@usesfieldname{colonmark}\  #1}%
+    \fi%
 \fi%
 }%
 \newcommand{\tr@field}[2]{%
 \textbf{#1}\tr@usesfieldname{colonmark} #2%
 }%
+\newcounter{taskcounter}
 \newcommand{\trtask}[9][]{%
     \par%
     \ifblank{#2}{
@@ -121,9 +135,11 @@ Missing Field Name%
     \def\trtask@temp{#2}%
     }%
     \refstepcounter{tasks}%
+    \refstepcounter{taskcounter}%
+    \protected@edef\@currentlabelname{\trtask@temp}% trying to make it work
     \addcontentsline{trt}{tasks}{\protect\numberline{\thetasks}{\trtask@temp}}%
     \trstatuscolor{#1}%
-    \begin{tcolorbox}[title=\tr@title{\trtask@temp},%
+    \begin{tcolorbox}[title=\tr@title{\trtask@temp}{\thetaskcounter},%
 colback=\tr@currentboxcolor!5!white,%
 colframe=\tr@currentboxcolor!75!black%
 ]%
