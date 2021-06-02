@@ -64,15 +64,16 @@
 Missing Field Name%
     \fi%
 }%
-\newcommand{\trsetfieldsnames}[6]{%
+\newcommand{\trsetfieldsnames}[7]{%
     \traddfieldname{status}{#1}
-    \traddfieldname{assigned}{#2}
-    \traddfieldname{from}{#3}
-    \traddfieldname{to}{#4}
-    \traddfieldname{done}{#5}
-    \traddfieldname{why}{#6}
+    \traddfieldname{duedate}{#2}
+    \traddfieldname{assigned}{#3}
+    \traddfieldname{from}{#4}
+    \traddfieldname{to}{#5}
+    \traddfieldname{done}{#6}
+    \traddfieldname{why}{#7}
 }%
-\trsetfieldsnames{Status}{Assigned in}{From}{To}{Done in}{Rationale}
+\trsetfieldsnames{Status}{Due date}{Assigned in}{From}{To}{Done in}{Rationale}
 \def\tr@currentboxcolor{\tr@usestatecolor{other}}%
 \newcommand{\trstatuscolor}[1]%
 {%
@@ -92,19 +93,13 @@ Missing Field Name%
 \@ifundefined{chapter}%
 {\newlistof[section]{tasks}{trt}{\trlisttasks}}%
 {\newlistof[chapter]{tasks}{trt}{\trlisttasks}}%
-\newcommand{\trstatus}[2][\tr@usesfieldname{status}]{%
+\newcommand{\tr@title}[2]{%
     \textbf{#1}: #2%
 }%
-\newcommand{\trwhen}[2][\tr@usesfieldname{assigned}]{%
-    \textbf{#1}: #2%
+\newcommand{\tr@field}[2]{%
+\textbf{#1}: #2%
 }%
-\newcommand{\trwho}[2][\tr@usesfieldname{to}]{%
-    \textbf{#1}: #2%
-}%
-\newcommand{\trwhy}[2][\tr@usesfieldname{why}]{%
-    \textbf{#1}: #2%
-}%
-\newcommand{\trtask}[8][]{%
+\newcommand{\trtask}[9][]{%
     \par%
     \ifblank{#2}{
     \def\trtask@temp{Task without a name}%
@@ -121,31 +116,35 @@ Missing Field Name%
         ]%
         \ifblank{#1}{}%
         {%
-            \trstatus{#1}\newline%
+            \tr@field{\tr@usesfieldname{status}}{#1}\newline%
         }%
         \ifblank{#3}{}%
-        {%
-            \trwhen{#3}\newline%
-        }%
-        \ifblank{#4}{}%
-        {%
-            \trwho[\tr@usesfieldname{from}]{#4}\newline%
-        }%
-        \ifblank{#5}{}%
-        {%
-            \trwho{#5}\newline%
-        }%
-        \ifblank{#6}{}%
-        {%
-            \trwhy{#6}\newline%
-        }%
-        \ifblank{#7}{}%
-        {%
-            \trwhen[\tr@usesfieldname{done}]{#7}\newline%
-        }%
-        \ifblank{#8}{}%
+{%
+    \tr@field{\tr@usesfieldname{duedate}}{#3}\newline%
+}%
+\ifblank{#4}{}%
+{%
+    \tr@field{\tr@usesfieldname{assigned}}{#4}\newline%
+}%
+\ifblank{#5}{}%
+{%
+    \tr@field{\tr@usesfieldname{from}}{#5}\newline%
+}%
+\ifblank{#6}{}%
+{%
+    \tr@field{\tr@usesfieldname{to}}{#6}\newline%
+}%
+\ifblank{#7}{}%
+{%
+    \tr@field{\tr@usesfieldname{why}}{#7}\newline%
+}%
+\ifblank{#8}{}%
+{%
+    \tr@field{\tr@usesfieldname{done}}{#8}\newline%
+}%
+        \ifblank{#9}{}%
         {\tcblower%
-        #8%
+        #9%
         }%
     \end{tcolorbox}%
 }%

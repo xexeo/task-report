@@ -68,7 +68,7 @@
 %</driver>
 % \fi
 %
-% \CheckSum{151}
+% \CheckSum{150}
 %
 % \CharacterTable
 %  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
@@ -158,37 +158,37 @@
 %
 % \DescribeMacro{\trtask}
 % This is the main macro for the package.
-%|\trtask|\oarg{status}\marg{name}\marg{when-assigned}
+%|\trtask|\oarg{status}\marg{name}\marg{due date}\marg{when-assigned}
 % \marg{who-assigned}\marg{to-who-assigned}
 % \marg{why}
 % \marg{when-done}
 % \marg{extra-text}
 %
-% Altough it has 7 mandatory parameters, all of them can be empty.
+% Altough it has 8 arguments parameters, all of them can be empty. It has 9 arguments because this is the standard \LaTeX\  maximum.
 %
-% There are 5 possible states that are associated with a color (\textit{default color}): todo (red), doing(yellow), tocheck (cyan), checking (blue), and done(green). There is a pseudo-state other (black) that will be the color of any other word used of a state. Colors belong to the |xcolor| package and are configurable, as explained in section \ref{sec:conf}.
+% There are 5 possible standard states that are associated with a color (\textit{default color}): todo (red), doing(yellow), tocheck (cyan), checking (blue), and done(green). There is a pseudo-state other (black) that will be the color of any other word used of a state. Colors belong to the |xcolor| package and are configurable, as explained in section \ref{sec:conf}.
 %
 % The example:
 %\begin{verbatim}
-%\trtask[todo]{Mage coffe}{\today}{Geraldo Xexéo}{}{}{}{Please do the coffe strong}
-%\trtask[doing]{Drink a coffe}{June, 1st 2021}{The Boss}{The Worker}{}{}{}
-%\trtask[tocheck]{Roast the beef}{June, 1st 2021}{The Boss}{The Worker}{\today}{}{Rare, please}
-%\trtask[checking]{Drink another beer}{June, 1st 2021}{The Boss}{The Worker}{\today}{}{Please check if you have age to drink in your country. If not, drink orangejuice.}
-%\trtask[done]{Drink a beer}{\today}{The Boss}{The Worker}{\today}{}{}
-%\trtask{}{}{}{}{}{}{}
-%\trtask[done]{}{}{}{}{}{}{}
-%\trtask{Grab a hot-dog}{3}{4}{5}{6}{7}{A hot dog must be done with bread and sausage}
+%\trtask[todo]{Make coffe}{Soon}{\today}{Geraldo Xexéo}{}{}{}{Please do the coffe strong}
+%\trtask[doing]{Drink a coffe}{In 5 days}{June, 1st 2021}{The Boss}{The Worker}{}{}{}
+%\trtask[tocheck]{Roast the beef}{}{June, 1st 2021}{The Boss}{The Worker}{}{\today}{Rare, plese}
+%\trtask[checking]{Drink another beer}{}{June, 1st 2021}{The Boss}{The Worker}{}{\today}{Please check if you have age to drink in your country. If not, drink orangejuice.}
+%\trtask[done]{Drink a beer}{}{\today}{The Boss}{The Worker}{Because I want}{\today}{}
+%\trtask{}{}{}{}{}{}{}{}
+%\trtask[done]{}{}{}{}{}{}{}{}
+%\trtask[arg 1]{arg 2}{arg 3}{arg 4}{arg 5}{arg 6}{arg 7}{arg 8}{arg 9}
 %\end{verbatim}
 % generates:
 %
-%\trtask[todo]{Make coffe}{\today}{Geraldo Xexéo}{}{}{}{Please do the coffe strong}
-%\trtask[doing]{Drink a coffe}{June, 1st 2021}{The Boss}{The Worker}{}{}{}
-%\trtask[tocheck]{Roast the beef}{June, 1st 2021}{The Boss}{The Worker}{}{\today}{Rare, plese}
-%\trtask[checking]{Drink another beer}{June, 1st 2021}{The Boss}{The Worker}{}{\today}{Please check if you have age to drink in your country. If not, drink orangejuice.}
-%\trtask[done]{Drink a beer}{\today}{The Boss}{The Worker}{Because I want}{\today}{}
-%\trtask{}{}{}{}{}{}{}
-%\trtask[done]{}{}{}{}{}{}{}
-%\trtask[arg 1]{arg 2}{arg 3}{arg 4}{arg 5}{arg 6}{arg 7}{arg 8}
+%\trtask[todo]{Make coffe}{Soon}{\today}{Geraldo Xexéo}{}{}{}{Please do the coffe strong}
+%\trtask[doing]{Drink a coffe}{In 5 days}{June, 1st 2021}{The Boss}{The Worker}{}{}{}
+%\trtask[tocheck]{Roast the beef}{}{June, 1st 2021}{The Boss}{The Worker}{}{\today}{Rare, plese}
+%\trtask[checking]{Drink another beer}{}{June, 1st 2021}{The Boss}{The Worker}{}{\today}{Please check if you have age to drink in your country. If not, drink orangejuice.}
+%\trtask[done]{Drink a beer}{}{\today}{The Boss}{The Worker}{Because I want}{\today}{}
+%\trtask{}{}{}{}{}{}{}{}
+%\trtask[done]{}{}{}{}{}{}{}{}
+%\trtask[arg 1]{arg 2}{arg 3}{arg 4}{arg 5}{arg 6}{arg 7}{arg 8}{arg 9}
 %
 %
 % \subsection{Configuration Options}
@@ -207,17 +207,17 @@
 %\begin{verbatim}
 %\trsetboxcolors{magenta}{purple}{orange}{pink}{lime}{pink}
 %
-%\trtask[todo]{Drink a coffe}{\today}{The Boss}{The Worker}%
+%\trtask[todo]{Drink a coffe}{next day}{\today}{The Boss}{The Worker}%
 %{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
-%\trtask[doing]{Drink a coffe}{\today}{The Boss}{The Worker}%
+%\trtask[doing]{Drink a coffe}{next day}{\today}{The Boss}{The Worker}%
 %{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
-%\trtask[tocheck]{Drink a coffe}{\today}{The Boss}{The Worker}%
+%\trtask[tocheck]{Drink a coffe}{next day}{\today}{The Boss}{The Worker}%
 %{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
-%\trtask[checking]{Drink a coffe}{\today}{The Boss}{The Worker}%
+%\trtask[checking]{Drink a coffe}{next day}{\today}{The Boss}{The Worker}%
 %{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
-%\trtask[done]{Drink a coffe}{\today}{The Boss}{The Worker}%
+%\trtask[done]{Drink a coffe}{next day}{\today}{The Boss}{The Worker}%
 %{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
-%\trtask{Drink a coffe}{\today}{The Boss}{The Worker}%
+%\trtask{Drink a coffe}{\today}{next day}{The Boss}{The Worker}%
 %{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
 %\end{verbatim}
 %
@@ -225,17 +225,19 @@
 %
 %\trsetboxcolors{magenta}{purple}{orange}{pink}{lime}{pink}
 %
-%\trtask[todo]{Drink a coffe}{\today}{The Boss}{The Worker}%
+%\trsetboxcolors{magenta}{purple}{orange}{pink}{lime}{pink}
+%
+%\trtask[todo]{Drink a coffe}{next day}{\today}{The Boss}{The Worker}%
 %{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
-%\trtask[doing]{Drink a coffe}{\today}{The Boss}{The Worker}%
+%\trtask[doing]{Drink a coffe}{next day}{\today}{The Boss}{The Worker}%
 %{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
-%\trtask[tocheck]{Drink a coffe}{\today}{The Boss}{The Worker}%
+%\trtask[tocheck]{Drink a coffe}{next day}{\today}{The Boss}{The Worker}%
 %{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
-%\trtask[checking]{Drink a coffe}{\today}{The Boss}{The Worker}%
+%\trtask[checking]{Drink a coffe}{next day}{\today}{The Boss}{The Worker}%
 %{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
-%\trtask[done]{Drink a coffe}{\today}{The Boss}{The Worker}%
+%\trtask[done]{Drink a coffe}{next day}{\today}{The Boss}{The Worker}%
 %{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
-%\trtask{Drink a coffe}{\today}{The Boss}{The Worker}%
+%\trtask{Drink a coffe}{\today}{next day}{The Boss}{The Worker}%
 %{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
 %
 %
@@ -244,10 +246,10 @@
 %
 % \subsection{Changing Field Names}
 %
-% You can change all field names with command \DescribeMacro{\trsetfieldsnames}.
+% You can change all field names with command \DescribeMacro{\trsetfieldsnames}. % This command can be used to internationalization or to make these box used by any other reason.
 %
 %
-% |\trsetfieldsnames|\marg{status}\marg{assigned}
+% |\trsetfieldsnames|\marg{status}\marg{duedate}\marg{assigned}
 % \marg{from}\marg{to}
 % \marg{done}\marg{why}
 %
@@ -255,18 +257,17 @@
 % For example:
 %
 %\begin{verbatim}
-%\trsetfieldsnames{Stage}{Demand date}{Who asked for}{To who}{Ready in}{Reasons}
-%\trtask[done]{Drink a coffe}{\today}{The Boss}{The Worker}%
+%\trsetfieldsnames{Stage}{Must be ready in}{Demand date}{Who asked for}{To who}{Ready in}{Reasons}
+%\trtask[done]{Drink a coffe}{5 days}{\today}{The Boss}{The Worker}%
 %{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
 %\end{verbatim}
 %
 % generates:
 %
-%\trsetfieldsnames{Stage}{Demand date}{Who asked for}{To who}{Ready in}{Reasons}
-%\trtask[done]{Drink a coffe}{\today}{The Boss}{The Worker}%
+%\trsetfieldsnames{Stage}{Must be ready in}{Demand date}{Who asked for}{To who}{Ready in}{Reasons}
+%\trtask[done]{Drink a coffe}{5 days}{\today}{The Boss}{The Worker}%
 %{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
 %
-% This command can be used to internationalization.
 %
 %\trsetfieldsnames{Status}{Assigned in}{From}{To}{Done in}{Rationale}
 %
@@ -439,18 +440,19 @@ Missing Field Name%
 % Set the colors for the 6 types of standard states
 % Black otherwise.
 %
-% |\trsetfieldsnames|\marg{status}\marg{assigned}
+% |\trsetfieldsnames|\marg{status}\marg{duedate}\marg{assigned}
 % \marg{from}\marg{to}
 % \marg{done}\marg{why}
 %
 %    \begin{macrocode}
-\newcommand{\trsetfieldsnames}[6]{%
+\newcommand{\trsetfieldsnames}[7]{%
     \traddfieldname{status}{#1}
-    \traddfieldname{assigned}{#2}
-    \traddfieldname{from}{#3}
-    \traddfieldname{to}{#4}
-    \traddfieldname{done}{#5}
-    \traddfieldname{why}{#6}
+    \traddfieldname{duedate}{#2}
+    \traddfieldname{assigned}{#3}
+    \traddfieldname{from}{#4}
+    \traddfieldname{to}{#5}
+    \traddfieldname{done}{#6}
+    \traddfieldname{why}{#7}
 }%
 %    \end{macrocode}
 % \end{macro}
@@ -459,7 +461,7 @@ Missing Field Name%
 % Sets the standard text for the fields
 %
 %    \begin{macrocode}
-\trsetfieldsnames{Status}{Assigned in}{From}{To}{Done in}{Rationale}
+\trsetfieldsnames{Status}{Due date}{Assigned in}{From}{To}{Done in}{Rationale}
 %    \end{macrocode}
 %
 %
@@ -512,31 +514,19 @@ Missing Field Name%
 %
 % \subsubsection{Helpers}
 %
-% \begin{macro}{\trstatus}
-% \begin{macro}{\trwhen}
-% \begin{macro}{\trwhy}
-% \begin{macro}{\trwho}
+% \begin{macro}{\tr@field}
 %
 % Helpers to build the task
 %
 %    \begin{macrocode}
-\newcommand{\trstatus}[2][\tr@usesfieldname{status}]{%
+\newcommand{\tr@title}[2]{%
     \textbf{#1}: #2%
 }%
-\newcommand{\trwhen}[2][\tr@usesfieldname{assigned}]{%
-    \textbf{#1}: #2%
-}%
-\newcommand{\trwho}[2][\tr@usesfieldname{to}]{%
-    \textbf{#1}: #2%
-}%
-\newcommand{\trwhy}[2][\tr@usesfieldname{why}]{%
-    \textbf{#1}: #2%
+\newcommand{\tr@field}[2]{%
+\textbf{#1}: #2%
 }%
 %
 %    \end{macrocode}
-% \end{macro}
-% \end{macro}
-% \end{macro}
 % \end{macro}
 %
 % \subsubsection{Main task macro}
@@ -545,25 +535,27 @@ Missing Field Name%
 %
 %  Describes a task
 %
-%|\trtask|\oarg{status}\marg{name}\marg{when-assigned}
-%\marg{who-assigned}\marg{to-who-assigned}\marg{why}\marg{when-done}\marg{extra-text}
+%|\trtask|\oarg{status}\marg{name}\marg{due-date}
+% \marg{when-assigned} \marg{who-assigned}
+% \marg{to-who-assigned}\marg{why}
+% \marg{when-done}\marg{extra-text}
 %
 % For example:
 %\begin{verbatim}
-%\trtask[Help students organize]{doing}
-% {Prepare a \LaTeX\ style to support task report}
-% {2021-05-31}{Xexéo}{Geraldo Xexéo}{}
+%\trtask[doing]{Make a \LaTeX\  Kanbam document}{soon}
+% {2021-05-31}{Xexéo}{Geraldo Xexéo}{Help control tasks}
+% {not yet}{Use colors}
 %\end{verbatim}
 %
 % generates:
 %
-%\trtask[doing]{Prepare a \LaTeX\ style to support task report}
-% {2021-05-31}{Xexéo}{Geraldo Xexéo}{Help students organize}
-% {not yet}{This is an idea to help understanding the work being done}
+%\trtask[doing]{Make a \LaTeX   Kanbam document}{soon}
+% {2021-05-31}{Xexéo}{Geraldo Xexéo}{Help control tasks}
+% {not yet}{Use colors}
 %
 %    \begin{macrocode}
-%  [status] , what, when-assigned, from-who, to-who, why, when-done, extra
-\newcommand{\trtask}[8][]{%
+%  [status] , what, due-date when-assigned, from-who, to-who, why, when-done, extra
+\newcommand{\trtask}[9][]{%
     \par%
     \ifblank{#2}{
     \def\trtask@temp{Task without a name}%
@@ -580,31 +572,35 @@ Missing Field Name%
         ]%
         \ifblank{#1}{}%
         {%
-            \trstatus{#1}\newline%
+            \tr@field{\tr@usesfieldname{status}}{#1}\newline%
         }%
         \ifblank{#3}{}%
-        {%
-            \trwhen{#3}\newline%
-        }%
-        \ifblank{#4}{}%
-        {%
-            \trwho[\tr@usesfieldname{from}]{#4}\newline%
-        }%
-        \ifblank{#5}{}%
-        {%
-            \trwho{#5}\newline%
-        }%
-        \ifblank{#6}{}%
-        {%
-            \trwhy{#6}\newline%
-        }%
-        \ifblank{#7}{}%
-        {%
-            \trwhen[\tr@usesfieldname{done}]{#7}\newline%
-        }%
-        \ifblank{#8}{}%
+{%
+    \tr@field{\tr@usesfieldname{duedate}}{#3}\newline%
+}%
+\ifblank{#4}{}%
+{%
+    \tr@field{\tr@usesfieldname{assigned}}{#4}\newline%
+}%
+\ifblank{#5}{}%
+{%
+    \tr@field{\tr@usesfieldname{from}}{#5}\newline%
+}%
+\ifblank{#6}{}%
+{%
+    \tr@field{\tr@usesfieldname{to}}{#6}\newline%
+}%
+\ifblank{#7}{}%
+{%
+    \tr@field{\tr@usesfieldname{why}}{#7}\newline%
+}%
+\ifblank{#8}{}%
+{%
+    \tr@field{\tr@usesfieldname{done}}{#8}\newline%
+}%
+        \ifblank{#9}{}%
         {\tcblower%
-        #8%
+        #9%
         }%
     \end{tcolorbox}%
 }%
