@@ -2,7 +2,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{tocloft}
-\usepackage{../task-report}
+\usepackage[showtasknumbers]{../task-report}
 \usepackage{hyperref}
 \author{Geraldo Xexéo}
 \title{My tasks}
@@ -11,94 +11,130 @@
 \begin{document}
 \maketitle
 
+This document uses \printtaskreportversion.
+
 \section{Model Task}
 \trtask[status]{name}{date assigned}{The Boss}{The Worker}{Why you need}{date done}{Extra text, comments and etc.}
 
 \section{Standard Tasks}
-\trtask[todo]{Drink a coffe}{\today}{The Boss}{The Worker}%
+\trtask[todo]{Drink a coffe}{ASAP}{\today}{The Boss}{The Worker}%
 {To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
-\trtask[doing]{Drink a coffe}{\today}{The Boss}{The Worker}%
+\trtask[doing]{Drink dark coffe}{ASAP}{\today}{The Boss}{The Worker}%
+{To keep awake}{\today}{Coffe must be strong and no sugar\label{task:ns}}
+\trtask[tocheck]{Drink a coffe}{ASAP}{\today}{The Boss}{The Worker}%
 {To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
-\trtask[tocheck]{Drink a coffe}{\today}{The Boss}{The Worker}%
+\trtask[checking]{Drink a coffe}{ASAP}{\today}{The Boss}{The Worker}%
 {To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
-\trtask[checking]{Drink a coffe}{\today}{The Boss}{The Worker}%
+\trtask[done]{Drink a coffe}{ASAP}{\today}{The Boss}{The Worker}%
 {To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
-\trtask[done]{Drink a coffe}{\today}{The Boss}{The Worker}%
-{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
-\trtask{Drink a coffe}{\today}{The Boss}{The Worker}%
-{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+\trtask{Drink stronger coffe}{ASAP}{\today}{The Boss}{The Worker}%
+{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar\label{task:sc}}
+
+\section{Checking references}
+
+Task \ref{task:ns}, named \nameref{task:ns}, is in page \pageref{task:ns}.
+
+Task \ref{task:sc}, named \nameref{task:sc}, is in page \pageref{task:sc}.
 
 \section{New state waiting is teal}
 
 \traddstatecolor{waiting}{teal}
-\trtask[waiting]{Drink a coffe}{\today}{The Boss}{The Worker}%
+\trtask[waiting]{Drink a coffe}{ASAP}{\today}{The Boss}{The Worker}%
 {To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
 
 
 \section{New Colors}
 \trsetboxcolors{magenta}{purple}{orange}{pink}{lime}{pink}
-\trtask[todo]{Drink a coffe}{\today}{The Boss}{The Worker}%
+\trtask[todo]{Drink a coffe}{ASAP}{\today}{The Boss}{The Worker}%
 {To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
-\trtask[doing]{Drink a coffe}{\today}{The Boss}{The Worker}%
+\trtask[doing]{Drink a coffe}{ASAP}{\today}{The Boss}{The Worker}%
 {To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
-\trtask[tocheck]{Drink a coffe}{\today}{The Boss}{The Worker}%
+\trtask[tocheck]{Drink a coffe}{ASAP}{\today}{The Boss}{The Worker}%
 {To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
-\trtask[checking]{Drink a coffe}{\today}{The Boss}{The Worker}%
+\trtask[checking]{Drink a coffe}{ASAP}{\today}{The Boss}{The Worker}%
 {To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
-\trtask[done]{Drink a coffe}{\today}{The Boss}{The Worker}%
+\trtask[done]{Drink a coffe}{ASAP}{\today}{The Boss}{The Worker}%
 {To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
-\trtask{Drink a coffe}{\today}{The Boss}{The Worker}%
+\trtask{Drink a coffe}{ASAP}{\today}{The Boss}{The Worker}%
 {To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
 
 
 \section{Recover Original Colors}
 \trsetboxcolors{red}{yellow}{cyan}{blue}{green}{black}
-\trtask[todo]{Drink a coffe}{\today}{The Boss}{The Worker}%
+
+
+\trtask[todo]{Drink a coffe}{ASAP}{\today}{The Boss}{The Worker}%
 {To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
-\trtask[doing]{Drink a coffe}{\today}{The Boss}{The Worker}%
+\trtask[doing]{Drink a coffe}{ASAP}{\today}{The Boss}{The Worker}%
 {To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
-\trtask[tocheck]{Drink a coffe}{\today}{The Boss}{The Worker}%
+\trtask[tocheck]{Drink a coffe}{ASAP}{\today}{The Boss}{The Worker}%
 {To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
-\trtask[checking]{Drink a coffe}{\today}{The Boss}{The Worker}%
+\trtask[checking]{Drink a coffe}{ASAP}{\today}{The Boss}{The Worker}%
 {To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
-\trtask[done]{Drink a coffe}{\today}{The Boss}{The Worker}%
+\trtask[done]{Drink a coffe}{ASAP}{\today}{The Boss}{The Worker}%
 {To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
-\trtask{Drink a coffe}{\today}{The Boss}{The Worker}%
+\trtask{Drink a coffe}{ASAP}{\today}{The Boss}{The Worker}%
 {To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
 
 \section{Missing Arguments}
-\trtask[]{Drink a coffe}{\today}{The Boss}{The Worker}%
+\trtask[]{Drink a coffe}{ASAP}{\today}{The Boss}{The Worker}%
 {To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
-\trtask[todo]{}{\today}{The Boss}{The Worker}%
+\trtask[todo]{}{ASAP}{\today}{The Boss}{The Worker}%
 {To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
-\trtask[doing]{Drink a coffe}{}{The Boss}{The Worker}%
+\trtask[done]{Drink a coffe}{}{\today}{The Boss}{The Worker}%
 {To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
-\trtask[tocheck]{Drink a coffe}{\today}{}{The Worker}%
+\trtask[doing]{Drink a coffe}{ASAP}{}{The Boss}{The Worker}%
 {To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
-\trtask[checking]{Drink a coffe}{\today}{The Boss}{}%
+\trtask[tocheck]{Drink a coffe}{ASAP}{\today}{}{The Worker}%
 {To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
-\trtask[done]{Drink a coffe}{\today}{The Boss}{The Worker}%
+\trtask[checking]{Drink a coffe}{ASAP}{\today}{The Boss}{}%
+{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+\trtask[done]{Drink a coffe}{ASAP}{\today}{The Boss}{The Worker}%
 {}{\today}{Coffe must be strong and add 1 spoon of sugar}
-\trtask[waiting]{Drink a coffe}{\today}{The Boss}{The Worker}%
+\trtask[waiting]{Drink a coffe}{ASAP}{\today}{The Boss}{The Worker}%
 {To keep awake}{}{Coffe must be strong and add 1 spoon of sugar}
-\trtask[]{Drink a coffe}{\today}{The Boss}{The Worker}%
+\trtask[done]{Drink a coffe}{ASAP}{\today}{The Boss}{The Worker}%
 {To keep awake}{\today}{}
 
 \section{Setting Field Names}
 
 Setting them:
 
-\trsetfieldsnames{Stage}{Demand date}{Who asked for}{To who}{Ready in}{Reasons}
-\trtask[done]{Drink a coffe}{\today}{The Boss}{The Worker}%
+\trsetfieldsnames{Stage}{Deadline:}{Demand date}{Who asked for}{To who}{Ready in}{Reasons}
+\trtask[done]{Drink a coffe}{ASAP}{\today}{The Boss}{The Worker}%
 {To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
 
  This command can be used to internationalization.
 
 After changing to original values.
 
-\trsetfieldsnames{Status}{Assigned in}{From}{To}{Done in}{Rationale}
-\trtask[done]{Drink a coffe}{\today}{The Boss}{The Worker}%
+\trsetfieldsnames{Status}{Due date}{Assigned in}{From}{To}{Done in}{Rationale}
+\trtask[done]{Drink a coffe}{ASAP}{\today}{The Boss}{The Worker}%
 {To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+
+
+\subsection{Changing Header}
+
+\trsettitlelabel{Task}
+\trtask[done]{Drink a coffe}{ASAP}{\today}{The Boss}{The Worker}%
+{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+
+Back to normal in next subsection...
+
+\subsection{Changing Colon}
+
+\trsetcolon{$\leftarrow$}
+\trtask[done]{Drink a coffe}{ASAP}{\today}{The Boss}{The Worker}%
+{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+
+Back to normal
+
+\trsettitlelabel{}
+\trsetcolon{:}
+\trtask[done]{Drink a coffe}{ASAP}{\today}{The Boss}{The Worker}%
+{To keep awake}{\today}{Coffe must be strong and add 1 spoon of sugar}
+
+
 
 \newpage
 \setlength{\cfttasksnumwidth}{20pt}

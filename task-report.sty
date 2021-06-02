@@ -20,14 +20,19 @@
 %% and version 1.3 or later is part of all distributions of LaTeX version
 %% 2005/12/01 or later.
 \NeedsTeXFormat{LaTeX2e}
-\def\tr@version{v0.4}
+\def\tr@version{v0.5}
 \ProvidesPackage{task-report}[2021/05/31 \tr@version task-report]
 %% Set the colors for the 6 types of standard states
+\newif\if@showtasknumbers\@showtasknumbersfalse%
+\DeclareOption{showtasknumbers}{\@showtasknumberstrue}%
+\ProcessOptions\relax
 \RequirePackage{tcolorbox}%
 \RequirePackage{etoolbox}%
-\RequirePackage{tocloft}
+\RequirePackage{tocloft}%
+\RequirePackage{hyperref}%
+
 \newcommand{\taskreportversion}{\tr@version}%
-\newcommand{\printtaskreportversion}{task-report v. \taskreportversion}%
+\newcommand{\printtaskreportversion}{task-report \taskreportversion}%
 \newcommand{\traddstatecolor}[2]{%
     \@ifundefined{\string\color@#2}%
     {%
@@ -64,15 +69,25 @@
 Missing Field Name%
     \fi%
 }%
-\newcommand{\trsetfieldsnames}[6]{%
-    \traddfieldname{status}{#1}
-    \traddfieldname{assigned}{#2}
-    \traddfieldname{from}{#3}
-    \traddfieldname{to}{#4}
-    \traddfieldname{done}{#5}
-    \traddfieldname{why}{#6}
+\newcommand{\trsetfieldsnames}[7]{%
+    \traddfieldname{status}{#1}%
+    \traddfieldname{duedate}{#2}%
+    \traddfieldname{assigned}{#3}%
+    \traddfieldname{from}{#4}%
+    \traddfieldname{to}{#5}%
+    \traddfieldname{done}{#6}%
+    \traddfieldname{why}{#7}%
 }%
-\trsetfieldsnames{Status}{Assigned in}{From}{To}{Done in}{Rationale}
+\traddfieldname{defaulttitle}{Task without a name}%
+\def\tr@defaulttitlelabel{}%
+\newcommand{\trsettitlelabel}[1]{%
+    \def\tr@defaulttitlelabel{#1}%
+}%
+\trsetfieldsnames{Status}{Due date}{Assigned in}{From}{To}{Done in}{Rationale}
+\newcommand{\trsetcolon}[1]{%
+    \traddfieldname{colonmark}{#1}
+}
+\trsetcolon{:}
 \def\tr@currentboxcolor{\tr@usestatecolor{other}}%
 \newcommand{\trstatuscolor}[1]%
 {%
@@ -92,60 +107,75 @@ Missing Field Name%
 \@ifundefined{chapter}%
 {\newlistof[section]{tasks}{trt}{\trlisttasks}}%
 {\newlistof[chapter]{tasks}{trt}{\trlisttasks}}%
-\newcommand{\trstatus}[2][\tr@usesfieldname{status}]{%
-    \textbf{#1}: #2%
+\newcommand{\tr@title}[2]{%
+\ifx\tr@defaulttitlelabel\empty%
+    \if@showtasknumbers%
+        \textbf{#2\tr@usesfieldname{colonmark} #1}%
+    \else%
+        \textbf{#1}%
+    \fi%
+\else%
+    \if@showtasknumbers%
+        \textbf{\tr@defaulttitlelabel\ #2\tr@usesfieldname{colonmark}\  #1}%
+    \else%
+        \textbf{\tr@defaulttitlelabel\tr@usesfieldname{colonmark}\  #1}%
+    \fi%
+\fi%
 }%
-\newcommand{\trwhen}[2][\tr@usesfieldname{assigned}]{%
-    \textbf{#1}: #2%
+\newcommand{\tr@field}[2]{%
+\textbf{#1}\tr@usesfieldname{colonmark} #2%
 }%
-\newcommand{\trwho}[2][\tr@usesfieldname{to}]{%
-    \textbf{#1}: #2%
-}%
-\newcommand{\trwhy}[2][\tr@usesfieldname{why}]{%
-    \textbf{#1}: #2%
-}%
-\newcommand{\trtask}[8][]{%
+\newcounter{taskcounter}
+\newcommand{\trtask}[9][]{%
     \par%
     \ifblank{#2}{
-    \def\trtask@temp{Task without a name}%
+    \def\trtask@temp{\tr@usesfieldname{defaulttitle}}%
     }%
     {%
     \def\trtask@temp{#2}%
     }%
     \refstepcounter{tasks}%
+    \refstepcounter{taskcounter}%
+    \protected@edef\@currentlabelname{\trtask@temp}% trying to make it work
     \addcontentsline{trt}{tasks}{\protect\numberline{\thetasks}{\trtask@temp}}%
     \trstatuscolor{#1}%
-    \begin{tcolorbox}[title=\textbf{\trtask@temp},%
-         colback=\tr@currentboxcolor!5!white,%
-         colframe=\tr@currentboxcolor!75!black%
-        ]%
+    \begin{tcolorbox}[title=\tr@title{\trtask@temp}{\thetaskcounter},%
+colback=\tr@currentboxcolor!5!white,%
+colframe=\tr@currentboxcolor!75!black%
+]%
         \ifblank{#1}{}%
         {%
-            \trstatus{#1}\newline%
+            \tr@field{\tr@usesfieldname{status}}{#1}\newline%
         }%
         \ifblank{#3}{}%
-        {%
-            \trwhen{#3}\newline%
+{%
+    \tr@field{\tr@usesfieldname{duedate}}{#3}\newline%
+}%
+\ifblank{#4}{}%
+{%
+    \tr@field{\tr@usesfieldname{assigned}}{#4}\newline%
+}%
+\ifblank{#5}{}%
+{%
+    \tr@field{\tr@usesfieldname{from}}{#5}\newline%
+}%
+\ifblank{#6}{}%
+{%
+    \tr@field{\tr@usesfieldname{to}}{#6}\newline%
+}%
+\ifblank{#7}{}%
+{%
+    \tr@field{\tr@usesfieldname{why}}{#7}\newline%
+}%
+\ifblank{#8}{}%
+{%
+    \tr@field{\tr@usesfieldname{done}}{#8}\newline%
+}%
+        \ifblank{#9}{}%
+        {\tcblower%
+        #9%
         }%
-        \ifblank{#4}{}%
-        {%
-            \trwho[\tr@usesfieldname{from}]{#4}\newline%
-        }%
-        \ifblank{#5}{}%
-        {%
-            \trwho{#5}\newline%
-        }%
-        \ifblank{#6}{}%
-        {%
-            \trwhy{#6}\newline%
-        }%
-        \ifblank{#7}{}%
-        {%
-            \trwhen[\tr@usesfieldname{done}]{#7}\newline%
-        }%
-        \ifblank{#8}{}%
-{\tcblower#8}%
-\end{tcolorbox}%
+    \end{tcolorbox}%
 }%
 \endinput
 %%
