@@ -17,8 +17,8 @@
 %
 %\iffalse
 %<package>\NeedsTeXFormat{LaTeX2e}
-%<package>\def\tr@version{v0.5}
-%<package>\ProvidesPackage{task-report}[2021/05/31 \tr@version task-report]
+%<package>\def\tr@version{v0.6}
+%<package>\ProvidesPackage{task-report}[2021/06/06 \tr@version task-report]
 %<*driver>
 \documentclass{ltxdoc}
 \usepackage[T1]{fontenc}
@@ -68,7 +68,7 @@
 %</driver>
 % \fi
 %
-% \CheckSum{202}
+% \CheckSum{217}
 %
 % \CharacterTable
 %  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
@@ -91,7 +91,8 @@
 % \changes{v0.3}{2021/05/31}{List of Tasks}
 % \changes{v0.4}{2021/06/01}{Allows redefining field names}
 % \changes{v0.5}{2021/06/01}{Allows redefining header and colon}
-% \changes{v0.5}{2021/06/01}{Numbers in tasks and references}
+% \changes{v0.6}{2021/06/01}{Numbers in tasks and references}
+% \changes{v0.7}{2021/06/06}{Memoir class (used abntex2) badly emulates tocloft}
 %\maketitle
 %
 % \tableofcontents
@@ -398,9 +399,31 @@
 \RequirePackage{etoolbox}%
 \RequirePackage{tocloft}%
 \RequirePackage{hyperref}%
-
 %    \end{macrocode}
+% \subsection{Solving problems with other packages}
 %
+% \subsubsection{Problems with \texttt{abntex2} and \texttt{memoir}}
+%
+% |abntex2| causes error in |\newlistof|, you
+% can't refer to |chapter|, |section| or other counter
+% as optional argument
+%
+% This error is actually |memoir| fault\pleasecite[memoir package], since it emulates
+% |tocloft| (and other packages). I can´t imagine why...
+%
+% Therefore, we will avoid using the command with option
+% when the class is present
+%
+%    \begin{macrocode}
+\@ifclassloaded{memoir}%
+{% TRUE
+    \newif\if@cwmemoirdefense\@cwmemoirdefensetrue%
+}%
+{% FALSE
+    \newif\if@cwmemoirdefense\@cwmemoirdefensefalse%
+}%
+%
+%    \end{macrocode}%
 % \subsection{Access to the current version}
 % We provide some macros for the user to know the version being used.
 % \begin{macro}{\taskreportversion}
@@ -593,9 +616,16 @@ Missing Field Name%
 }%
 \trsettasklisttitle{List of Tasks}%
 %% cria a lista, depende do pacoto tcloft
+\if@cwmemoirdefense%
+\@ifundefined{chapter}%
+{\newlistentry[section]{tasks}{trt}{0}}%
+{\newlistentry[chapter]{tasks}{trt}{0}}%
+\newlistof{listoftasks}{trt}{\trlisttasks}%
+\else%
 \@ifundefined{chapter}%
 {\newlistof[section]{tasks}{trt}{\trlisttasks}}%
 {\newlistof[chapter]{tasks}{trt}{\trlisttasks}}%
+\fi%
 %    \end{macrocode}
 %
 % \subsection{Declaring Tasks}

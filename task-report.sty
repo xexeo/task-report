@@ -20,8 +20,8 @@
 %% and version 1.3 or later is part of all distributions of LaTeX version
 %% 2005/12/01 or later.
 \NeedsTeXFormat{LaTeX2e}
-\def\tr@version{v0.5}
-\ProvidesPackage{task-report}[2021/05/31 \tr@version task-report]
+\def\tr@version{v0.6}
+\ProvidesPackage{task-report}[2021/06/06 \tr@version task-report]
 %% Set the colors for the 6 types of standard states
 \newif\if@showtasknumbers\@showtasknumbersfalse%
 \DeclareOption{showtasknumbers}{\@showtasknumberstrue}%
@@ -30,7 +30,13 @@
 \RequirePackage{etoolbox}%
 \RequirePackage{tocloft}%
 \RequirePackage{hyperref}%
-
+\@ifclassloaded{memoir}%
+{% TRUE
+    \newif\if@cwmemoirdefense\@cwmemoirdefensetrue%
+}%
+{% FALSE
+    \newif\if@cwmemoirdefense\@cwmemoirdefensefalse%
+}%
 \newcommand{\taskreportversion}{\tr@version}%
 \newcommand{\printtaskreportversion}{task-report \taskreportversion}%
 \newcommand{\traddstatecolor}[2]{%
@@ -104,9 +110,16 @@ Missing Field Name%
 }%
 \trsettasklisttitle{List of Tasks}%
 %% cria a lista, depende do pacoto tcloft
+\if@cwmemoirdefense%
+\@ifundefined{chapter}%
+{\newlistentry[section]{tasks}{trt}{0}}%
+{\newlistentry[chapter]{tasks}{trt}{0}}%
+\newlistof{listoftasks}{trt}{\trlisttasks}%
+\else%
 \@ifundefined{chapter}%
 {\newlistof[section]{tasks}{trt}{\trlisttasks}}%
 {\newlistof[chapter]{tasks}{trt}{\trlisttasks}}%
+\fi%
 \newcommand{\tr@title}[2]{%
 \ifx\tr@defaulttitlelabel\empty%
     \if@showtasknumbers%
