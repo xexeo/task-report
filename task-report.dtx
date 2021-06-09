@@ -17,8 +17,8 @@
 %
 %\iffalse
 %<package>\NeedsTeXFormat{LaTeX2e}
-%<package>\def\tr@version{v0.6}
-%<package>\ProvidesPackage{task-report}[2021/06/06 \tr@version task-report]
+%<package>\def\tr@version{v0.8}
+%<package>\ProvidesPackage{task-report}[2021/06/09 \tr@version task-report]
 %<*driver>
 \documentclass{ltxdoc}
 \usepackage[T1]{fontenc}
@@ -68,7 +68,7 @@
 %</driver>
 % \fi
 %
-% \CheckSum{217}
+% \CheckSum{228}
 %
 % \CharacterTable
 %  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
@@ -93,6 +93,7 @@
 % \changes{v0.5}{2021/06/01}{Allows redefining header and colon}
 % \changes{v0.6}{2021/06/01}{Numbers in tasks and references}
 % \changes{v0.7}{2021/06/06}{Memoir class (used abntex2) badly emulates tocloft}
+\changes{v0.8}{2021/06/09}{Coppetex classes with blamed tocloft}
 %\maketitle
 %
 % \tableofcontents
@@ -379,8 +380,10 @@
 %
 %    \begin{macrocode}
 \newif\if@showtasknumbers\@showtasknumbersfalse%
+\newif\if@cwtoclofttitles\@cwtoclofttitlesfalse
 %
 \DeclareOption{showtasknumbers}{\@showtasknumberstrue}%
+\DeclareOption{toclofttitles}{\@cwtoclofttitlestrue}
 %
 \ProcessOptions\relax
 %    \end{macrocode}
@@ -394,10 +397,22 @@
 %    \item |tocloft|  create the list of tasks
 %\end{itemize}
 %
+% Must defend coppe against tocloft
+%
 %    \begin{macrocode}
 \RequirePackage{tcolorbox}%
 \RequirePackage{etoolbox}%
-\RequirePackage{tocloft}%
+\@ifclassloaded{coppe}%
+{%
+    \RequirePackage[titles]{tocloft}%
+}%
+{%
+    \if@cwtoclofttitles%
+    \RequirePackage[titles]{tocloft}%
+    \else%
+    \RequirePackage{tocloft}%
+    \fi%
+}%
 \RequirePackage{hyperref}%
 %    \end{macrocode}
 % \subsection{Solving problems with other packages}
